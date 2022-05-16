@@ -1,2 +1,1 @@
-# postgresql
-# postgresql
+# Project setup
