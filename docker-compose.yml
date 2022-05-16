@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  clientapp:
+    image: clientapp
+    build:
+      context: postgresql_client
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3030:8080
