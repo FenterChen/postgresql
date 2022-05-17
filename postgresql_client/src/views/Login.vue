@@ -71,10 +71,12 @@
                         validationErrors.value.push("Password cannot be empty");
                     }
                 } else {
-                axios.post('localhost:5050/user', {                 
-                    user_id: user.id,
-                    Password: user.password,
-                }).then((res) => {
+                var postforms=new FormData();
+                postforms.append('user_id', user.id);
+                postforms.append('password', user.password);
+                
+                axios.post('http://localhost:5050/user',postforms)
+                .then((res) => {
                     localStorage.setItem("personallogin", JSON.stringify(res.data));
                     router.push({ name: "Home" });
                 })
