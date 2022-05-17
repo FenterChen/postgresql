@@ -10,3 +10,12 @@ services:
       NODE_ENV: development
     ports:
       - 3030:8080
+  server:
+    image: postgresqlserver
+    build:
+      context: postgresql_server
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 5050:8080
