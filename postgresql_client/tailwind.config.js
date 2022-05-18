@@ -2,9 +2,6 @@
 
 module.exports = {
     content: ["./src/**/*.{html,js}"],
-    plugins: [
-        require('flowbite/plugin')
-    ],
     darkMode: false, // or 'media' or 'class'
     // content: ["./src/**/*.{html,js,vue}"],
     purge: false,
@@ -37,10 +34,11 @@ module.exports = {
                 'platinum': "rgb(229, 229, 229)",
                 'regal-blue': '#243c5a',
                 'sky': 'rgb(56, 189, 248)',
-                'sky-600':'rgb(2, 132, 199)',
+                'sky-600': 'rgb(2, 132, 199)',
                 'sky-500': 'rgb(14, 165, 233)',
-                'cyan':'rgb(6,182,212)',
+                'cyan': 'rgb(6,182,212)',
             },
         },
     },
+    plugins: [require('flowbite/plugin')],
 };

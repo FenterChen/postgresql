@@ -223,13 +223,13 @@
 
                             <div class="col-span-6 sm:col-span-3">
                                 <p class="text-gray-700">
-                                    Userid:<span class="px-2">{{ userContent.userid }}</span>
+                                    Userid:<span class="px-2">{{ userContent.userId }}</span>
                                 </p>
                             </div>
                             <div class="col-span-6 sm:col-span-4">
                                 <label for="Username"
                                        class="block text-sm font-medium text-gray-700">Username</label>
-                                <input v-model="userContent.username"
+                                <input v-model="userContent.userName"
                                        type="text"
                                        name="Username"
                                        id="Username"
@@ -401,29 +401,19 @@
                 getUserinfo();
             });
             const getUserinfo = () => {
-                let personalInfo = JSON.parse(localStorage.getItem("personallogin"));
-                axios
-                    .post("api/Gameusers/userinfo", {
-                        Id: personalInfo,
-                    })
-                    .then((res) => {
-                        userContent.value = res.data;
-                        if (userContent.value.role == "Warrior") {
-                            roleimg.value = require("../assets/warrior.png");
-                        } else if (userContent.value.role == "Ninja") {
-                            roleimg.value = require("../assets/ninja.png");
-                        }
-                        for (let i = 0; i < userContent.value.userEquipments.length; i++) {
-                            if (userContent.value.userEquipments[i].useruse == 1) {
-                                currentEquip.value =
-                                    userContent.value.userEquipments[i].equipment;
-                            }
-                        }
-                        
-                    })
-                    .catch(function (err) {
-                        alert(err);
-                    });
+                let userinfo = JSON.parse(localStorage.getItem("personallogin"));
+                userContent.value=userinfo[0];
+                if (userContent.value.role == "Warrior") {
+                    roleimg.value = require("../assets/warrior.png");
+                } else if (userContent.value.role == "Ninja") {
+                    roleimg.value = require("../assets/ninja.png");
+                }
+                // for (let i = 0; i < userContent.value.userEquipments.length; i++) {
+                //     if (userContent.value.userEquipments[i].useruse == 1) {
+                //         currentEquip.value =
+                //             userContent.value.userEquipments[i].equipment;
+                //     }
+                // }
             };
             const switchRole = () => {
                 if (userContent.value.role == "Warrior") {
@@ -440,17 +430,16 @@
                 }
             };
             const save = () => {
+                var postforms=new FormData();
+                postforms.append('user_id', userContent.value.userId);
+                postforms.append('user_name', userContent.value.userName);
+                postforms.append('role', userContent.value.role);
                 axios
-                    .post("api/Gameusers/saveuserdata", {
-                        Userid: userContent.value.userid,
-                        Username: userContent.value.username,
-                        Role: userContent.value.role,
-                        Equipmentid: userUseEquipmentsid.value,
-                    })
+                    .post("http://localhost:5050/saveuser",postforms)
                     .then(() => {
                         rightOpen.value = false;
                     })
-                    .catch(function (err) {
+                    .catch((err)=> {
                         alert(err);
                     });
             };

@@ -72,7 +72,7 @@
                     }
                 } else {
                 var postforms=new FormData();
-                postforms.append('user_id', user.id);
+                postforms.append('userId', user.id);
                 postforms.append('password', user.password);
                 
                 axios.post('http://localhost:5050/user',postforms)
@@ -80,8 +80,8 @@
                     localStorage.setItem("personallogin", JSON.stringify(res.data));
                     router.push({ name: "Home" });
                 })
-                .catch(function (err) {
-                    alert(err);
+                .catch( (e)=> {
+                    alert(e.response.data);
                 });
                 }
                 }

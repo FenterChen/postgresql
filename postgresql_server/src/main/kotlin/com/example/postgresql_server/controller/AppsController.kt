@@ -1,30 +1,25 @@
 package com.example.postgresql_server.controller
 
 import com.example.postgresql_server.model.User
-import com.example.postgresql_server.services.Query
-import org.springframework.beans.factory.annotation.Autowired
+import com.example.postgresql_server.model.userNops
+import com.example.postgresql_server.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+
+
 
 @RestController
 @CrossOrigin("http://localhost:3030")
-class AppsController(){
-    @Autowired
-    val jdbcTemplate: JdbcTemplate?=null
+class AppsController(private val userRepository: UserRepository) {
     @GetMapping("/")
-    fun helloWord(): MutableList<User>? {
-        return Query().getalluser(jdbcTemplate)
-    }
+    fun getallusers(): MutableList<User> =
+        userRepository.findAll()
     @PostMapping("/user")
-    fun executeselectuser(user_id: String,password: String): Any? {
-      val result=Query().selectuser(jdbcTemplate,user_id,password)
-        if (result!!.size==0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    fun selectuser(userId: String,password: String): Any {
+        val result=userRepository.findAllByUserIdAndPassword(userId, password)
+        if (result.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("帳密錯誤");
         }else{
             return result
         }
