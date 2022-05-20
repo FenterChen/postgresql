@@ -1,4 +1,3 @@
 package com.example.postgresql_server.model
 
-class UserInput {
-}
+data class UserLogin (val userId:String,val password:String)

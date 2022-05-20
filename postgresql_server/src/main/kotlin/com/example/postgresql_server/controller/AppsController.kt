@@ -1,47 +1,53 @@
 package com.example.postgresql_server.controller
 
 import com.example.postgresql_server.model.User
+import com.example.postgresql_server.model.UserInfo
+import com.example.postgresql_server.model.UserLogin
+import com.example.postgresql_server.model.UserSave
 import com.example.postgresql_server.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
 //@CrossOrigin("http://localhost:3030")建置後
 @CrossOrigin("http://localhost:8081")
-class `AppsController.kt`(private val userRepository: UserRepository) {
-    @GetMapping("/")
+@RequestMapping("/api")
+class AppsController(private val userRepository: UserRepository) {
+    //取回所有會員
+    @GetMapping
     fun getallusers(): MutableList<User> =
         userRepository.findAll()
 
+    //會員登入
     @PostMapping("/user")
-    fun selectuser(userId: String, password: String): Any {
-        val result = userRepository.findAllByUserIdAndPassword(userId, password)
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("帳密錯誤");
-        } else {
-            return result
+    fun selectuser(@RequestBody userLogin: UserLogin): List<UserInfo> {
+        val result = userRepository.findAllByUserIdAndPassword(userLogin.userId, userLogin.password)
+        return result.ifEmpty {
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "帳密輸入錯誤"
+            )
         }
     }
 
-    @PostMapping("/saveuser")
-    fun saveuser(userId: String, userName: String?, role: String?): ResponseEntity<Nothing> {
-//        val result=userRepository.findByUserId(userId).map { userName->userName,role->role}
-
-//        println(result)
-
-//        userRepository.saveAndFlush(user)
-
-        return ResponseEntity.ok().body(null)
-
-//        return if (result.isEmpty()) {
-//            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("修改失敗");
-//        }else{
-//            result
-//        }
+    //更新會員資料
+    @PutMapping("/saver")
+    fun saveuser(@RequestBody userSave: UserSave): List<ResponseEntity<User>> {
+        val result = userRepository.findByUserId(userSave.userId).map { currentUser ->
+            val updatedUser: User =
+                currentUser
+                    .copy(
+                        userName = userSave.userName,
+                        role = userSave.role,
+                    )
+            ResponseEntity.ok().body(userRepository.save(updatedUser))
         }
-
-
-
+        return result.ifEmpty {
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "會員錯誤"
+            )
+        }
+    }
 }
