@@ -71,17 +71,18 @@
                         validationErrors.value.push("Password cannot be empty");
                     }
                 } else {
-                var postforms=new FormData();
-                postforms.append('userId', user.id);
-                postforms.append('password', user.password);
                 
-                axios.post('http://localhost:5050/user',postforms)
+                // axios.post('http://localhost:5050/api/user'建置後
+                axios.post('http://localhost:8080/api/user',{
+                    userId: user.id,
+                    password: user.password,
+                })
                 .then((res) => {
                     localStorage.setItem("personallogin", JSON.stringify(res.data));
                     router.push({ name: "Home" });
                 })
                 .catch( (e)=> {
-                    alert(e.response.data);
+                    alert(e.response.data.message)
                 });
                 }
                 }
