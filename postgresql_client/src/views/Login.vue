@@ -77,7 +77,7 @@ export default {
           validationErrors.value.push("Password cannot be empty");
         }
       } else {
-        // axios.post('http://localhost:5050/api/login'建置後
+        // axios.post("http://localhost:5050/api/login",{建置後
         axios
           .post("http://localhost:8080/api/login", {
             userId: user.id,
@@ -89,6 +89,17 @@ export default {
           })
           .catch((e) => {
             alert(e.response.data.message);
+            if (e.response.data.message == "帳號輸入錯誤，為方便測試直接建立帳號密碼") {
+              axios
+                .post("http://localhost:8080/api/register", {
+                  userId: user.id,
+                  password: user.password,
+                })
+                .then((res) => {
+                  localStorage.setItem("personallogin", JSON.stringify(res.data));
+                  router.push({ name: "Home" });
+                });
+            }
           });
       }
     };

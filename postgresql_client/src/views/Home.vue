@@ -19,7 +19,6 @@
           aria-hidden="true"
           >&#8203;</span
         >
-
         <div
           class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
         >
@@ -89,13 +88,13 @@
                   <label
                     for="editEquipment"
                     class="block text-sm font-medium text-gray-700"
-                    >editEquipment</label
+                    >equipmentName</label
                   >
                   <input
                     v-if="editId"
-                    v-model="editId.equipment"
+                    v-model="editId.equipmentName"
                     type="text"
-                    name="editEquipment"
+                    name="equipmentName"
                     id="editEquipment"
                     class="mt-1 py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md"
                   />
@@ -122,54 +121,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="fixed z-10 inset-0 overflow-y-auto"
-      aria-labelledby="modal-title"
-      role="dialog"
-      aria-modal="true"
-      :class="{ invisible: rightOpen }"
-    >
-      <div
-        class="flex items-end justify-center min-h-screen px-4 text-center sm:block sm:p-0"
-      >
-        <div
-          class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          aria-hidden="true"
-        ></div>
-        <span
-          class="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-          >&#8203;</span
-        >
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-        >
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                  Successfully saved!
-                </h3>
-                <div class="mt-2">
-                  <p class="text-sm text-gray-500">
-                    Your details were successfully saved.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button
-              type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-              @click="confirm"
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <HomeSave :Open="rightOpen" @update="selfConfirm"></HomeSave>
     <div class="md:grid md:grid-cols-3 md:gap-6 items-center">
       <div class="p-4 box-border flex flex-col items-center">
         <img class="p-2 box-border w-4/5" :src="roleimg" />
@@ -271,15 +223,15 @@
                 </thead>
                 <tbody>
                   <tr
-                    v-for="item in userContent.userEquipments"
-                    :key="item.equipment"
+                    v-for="item in userContent.userEquipment"
+                    :key="item.equipmentId"
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                   >
                     <th
                       scope="row"
                       class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap flex justify-between items-center"
                     >
-                      {{ item.equipment }}
+                      {{ item.equipmentName }}
                       <button
                         @click="useEquipment(item)"
                         class="px-4 py-2 mx-1 font-bold bg-regal-blue text-white rounded-full"
@@ -329,10 +281,14 @@
   </div>
 </template>
 <script>
+import HomeSave from "@/components/Homesave";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import router from "../router";
 export default {
+  components: {
+    HomeSave,
+  },
   setup() {
     const roleimg = ref();
     const newEquip = ref();
@@ -350,19 +306,28 @@ export default {
       getUserinfo();
     });
     const getUserinfo = () => {
-      let userinfo = JSON.parse(localStorage.getItem("personallogin"));
-      userContent.value = userinfo[0];
-      if (userContent.value.role == "Warrior") {
-        roleimg.value = require("../assets/warrior.png");
-      } else if (userContent.value.role == "Ninja") {
-        roleimg.value = require("../assets/ninja.png");
-      }
-      // for (let i = 0; i < userContent.value.userEquipments.length; i++) {
-      //     if (userContent.value.userEquipments[i].useruse == 1) {
-      //         currentEquip.value =
-      //             userContent.value.userEquipments[i].equipment;
-      //     }
-      // }
+      let personal = JSON.parse(localStorage.getItem("personallogin"));
+      // axios.post("http://localhost:5050/api/personal",{建置後
+      axios
+        .post("http://localhost:8080/api/personal", {
+          userId: personal.userId,
+        })
+        .then((res) => {
+          userContent.value = res.data;
+          if (userContent.value.role == "Warrior") {
+            roleimg.value = require("../assets/warrior.png");
+          } else if (userContent.value.role == "Ninja") {
+            roleimg.value = require("../assets/ninja.png");
+          }
+          for (let i = 0; i < userContent.value.userEquipment.length; i++) {
+            if (userContent.value.userEquipment[i].userUse == true) {
+              currentEquip.value = userContent.value.userEquipment[i].equipmentName;
+            }
+          }
+        })
+        .catch((e) => {
+          alert(e.response.data.message);
+        });
     };
     const switchRole = () => {
       if (userContent.value.role == "Warrior") {
@@ -380,7 +345,7 @@ export default {
     };
     const save = () => {
       axios
-        // .post("http://localhost:5050/saveuser",postforms)
+        // .post("http://localhost:5050/saveuser",{建置後
         .put("http://localhost:8080/api/saver", {
           userId: userContent.value.userId,
           userName: userContent.value.userName,
@@ -397,7 +362,7 @@ export default {
       localStorage.removeItem("personallogin");
       router.push({ name: "Login" });
     };
-    const confirm = () => {
+    const selfConfirm = () => {
       rightOpen.value = true;
     };
     const showUserinfo = () => {
@@ -467,15 +432,16 @@ export default {
       getUserinfo();
     };
     const useEquipment = (item) => {
+      // axios.post("http://localhost:5050/api/useEquipment",{建置後
+
       axios
-        .post("api/Gameusers/useequipment", {
-          Userid: userContent.value.userid,
-          Equipmentid: item.equipmentid,
-          Useruse: 1,
+        .put("http://localhost:8080/api/useEquipment", {
+          id: userContent.value.id,
+          equipmentId: item.equipmentId,
+          userUse: true,
         })
         .then(() => {
           getUserinfo();
-          currentEquip.value = item.equipment;
         })
         .catch(function (err) {
           alert(err);
@@ -486,18 +452,20 @@ export default {
       showdelete,
       newEquip,
       editId,
-      editCheck,
       deleteId,
       userContent,
       infoIsclick,
       equipIsclick,
       userUseEquipmentsid,
+      roleimg,
+      rightOpen,
+      showdedit,
+      currentEquip,
       getUserinfo,
       switchRole,
-      roleimg,
       save,
-      rightOpen,
-      confirm,
+      editCheck,
+      selfConfirm,
       logout,
       switchArmor,
       showUserinfo,
@@ -506,11 +474,9 @@ export default {
       deleteConfirm,
       deleteCancel,
       Add,
-      showdedit,
       editCancel,
       editConfirm,
       useEquipment,
-      currentEquip,
     };
   },
 };
