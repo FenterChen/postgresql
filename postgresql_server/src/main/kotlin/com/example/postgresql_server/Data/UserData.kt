@@ -17,6 +17,8 @@ data class User(
     @Column var role: String?,
     @Column(name="created_at") val createdAt: Instant= now(),
     @Column(name="updated_at") val updatedAt: Instant= now(),
+    @Column(name="weapon_slot")var weaponSlot: Int?,
+    @Column(name="armor_slot")var armorSlot: Int?,
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "userId")
     val userEquipment: MutableList<UserEquipment>?

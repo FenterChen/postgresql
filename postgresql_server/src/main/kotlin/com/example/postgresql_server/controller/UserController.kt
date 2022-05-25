@@ -1,6 +1,7 @@
 package com.example.postgresql_server.controller
 
 import com.example.postgresql_server.model.*
+import com.example.postgresql_server.repository.MulEquipmentRepository
 
 import com.example.postgresql_server.repository.UpdateUser
 import com.example.postgresql_server.repository.UserRepository
@@ -14,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException
 //@CrossOrigin("http://localhost:3030")建置後
 @CrossOrigin("http://localhost:8081")
 @RequestMapping("/api")
-class UserController(private val userRepository: UserRepository,private val updateUser: UpdateUser) {
+class UserController(private val userRepository: UserRepository,private val updateUser: UpdateUser,private val mulEquipmentRepository: MulEquipmentRepository) {
 
     //取回所有會員
     @GetMapping
@@ -50,7 +51,9 @@ class UserController(private val userRepository: UserRepository,private val upda
     fun personal(@RequestBody personal: UserIdDto): UserDto {
         try {
             val result = userRepository.findByUserId(personal.userId)
-            return sendToUserDto(result)
+            val weaponSlot = mulEquipmentRepository.equipmentSlot(result.weaponSlot)
+            val armorSlot = mulEquipmentRepository.equipmentSlot(result.armorSlot)
+            return sendSlotToUserDto(result,weaponSlot,armorSlot)
         }catch (exception: EmptyResultDataAccessException){
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "會員錯誤")
         }
@@ -58,11 +61,13 @@ class UserController(private val userRepository: UserRepository,private val upda
 
     //更新會員資料
     @PutMapping("/saver")
-    fun saver(@RequestBody userSave: UserSave): UserDto {
+    fun saver(@RequestBody userInput: UserInput): UserDto {
         try {
-            updateUser.updateByUserId(userSave.userId,userSave.userName,userSave.role)
-            val result = userRepository.findByUserId(userSave.userId)
-            return sendToUserDto(result)
+            updateUser.updateByUserId(userInput.userId,userInput.userName,userInput.role,userInput.weaponSlot,userInput.armorSlot)
+            val result = userRepository.findByUserId(userInput.userId)
+            val weaponSlot = mulEquipmentRepository.equipmentSlot(result.weaponSlot)
+            val armorSlot = mulEquipmentRepository.equipmentSlot(result.armorSlot)
+            return sendSlotToUserDto(result,weaponSlot,armorSlot)
         }catch (exception: EmptyResultDataAccessException){
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "會員錯誤")
         }

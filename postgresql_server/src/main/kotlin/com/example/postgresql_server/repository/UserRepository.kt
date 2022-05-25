@@ -18,12 +18,13 @@ interface UserRepository : JpaRepository<User, Int>{
     fun findByUserId(userId: String): User
 }
 
+//更新會員資料
 @Repository
 @Transactional
 class UpdateUser {
     @PersistenceContext
     private val em: EntityManager? = null
-    fun updateByUserId(userId: String, userName: String?, role:String?) {
+    fun updateByUserId(userId: String, userName: String?, role:String?,weaponSlot:Int?,armorSlot:Int?) {
         val cb = em!!.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
         val root: Root<User> = criteriaUpdate.from(User::class.java)
@@ -32,10 +33,12 @@ class UpdateUser {
             cb.equal(root.get<Int>("userId"), userId),
         )//where userId :userId
 
-        criteriaUpdate.set("userName", userName)///set value
-        criteriaUpdate.set("role", role)///set value
+        criteriaUpdate.set("userName", userName)//set value
+        criteriaUpdate.set("role", role)//set value
+        criteriaUpdate.set("weaponSlot", weaponSlot)//set value
+        criteriaUpdate.set("armorSlot", armorSlot)//set value
         val updatedAt =Instant.now()
-        criteriaUpdate.set("updatedAt", updatedAt)///set value
+        criteriaUpdate.set("updatedAt", updatedAt)//set value
 
         em.createQuery(criteriaUpdate).executeUpdate()
 
