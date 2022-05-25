@@ -61,8 +61,8 @@ import axios from "axios";
 export default {
   setup() {
     const user = reactive({
-      id: "",
-      password: "",
+      id: "test",
+      password: "test",
     });
     const validationErrors = ref([]);
 

@@ -50,9 +50,6 @@
 export default {
  props: ["Open"],
   setup() {
-    return {
-      confirm,
-    };
   },
 };
 </script>

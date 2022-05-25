@@ -6,5 +6,6 @@ data class UserSave (
     val userName:String?=null,
     val role:String?=null,
     val equipmentId: Int=0,
-    var userUse: Boolean,
+    val userUse: Boolean,
+    val equipmentType:Int=0,
     )

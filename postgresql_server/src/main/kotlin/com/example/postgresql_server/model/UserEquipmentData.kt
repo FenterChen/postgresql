@@ -2,9 +2,6 @@ package com.example.postgresql_server.model
 
 
 import javax.persistence.*
-import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.CriteriaUpdate
-import javax.persistence.criteria.Root
 
 
 @Entity
@@ -14,4 +11,7 @@ data class UserEquipment(
     @Column(name="user_id")  val userId: Int,
     @Column(name="equipment_name")  val equipmentName: String?,
     @Column(name="user_use")  var userUse: Boolean,
+    @Column(name="equipment_type")  var equipmentType: Int,
+    @Column(name="equipment_atk")  var equipmentAtk: Int,
+    @Column(name="equipment_def")  var equipmentDef: Int,
 )
