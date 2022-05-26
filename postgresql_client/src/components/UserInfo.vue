@@ -65,7 +65,7 @@ export default {
   },
   setup() {
     const user = computed(() => {
-      return store.getters.doneContent;
+      return store.state.userContent;
     });
     const rightOpen = ref(true);
     const save = () => {

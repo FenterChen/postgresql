@@ -11,23 +11,24 @@ export default createStore({
     cleanUser(state) {
       state.userContent = null;
     },
-    refresh(state) {
+    MuUserContent(state,res) {
+      console.log(res);
+      state.userContent = res.data
+    },
+  },
+  actions: {
+    refresh(context){
       axios
       .post("http://localhost:8080/api/personal", {
-        userId: state.userContent.userId,
+        userId: context.state.userContent.userId,
       })
       .then((res) => {
-        state.userContent = res.data;
+        context.commit('MuUserContent',res)
       })
       .catch((e) => {
         alert(e.response.data.message);
       });
-    },
-  },
-  actions: {},
-  getters: {
-     doneContent: state => {
-      return state.userContent
     }
   },
+  getters: {},
 });

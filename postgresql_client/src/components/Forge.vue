@@ -39,7 +39,7 @@ export default {
   setup() {
     const newEquip = ref();
     const user = computed(() => {
-      return store.getters.doneContent;
+      return store.state.userContent;
     });
     const Add = () => {
       axios

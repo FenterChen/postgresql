@@ -88,7 +88,7 @@ export default {
           equipmentName: item.value.equipmentName,
         })
         .then(() => {
-          store.commit("refresh");
+          store.dispatch("refresh");
           target.emit("cancel");
         })
         .catch((err) => {

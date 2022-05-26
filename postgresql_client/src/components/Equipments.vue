@@ -10,15 +10,15 @@
     @cancel="Cancel"
   ></Editquipment>
   <div class="grid grid-cols-2">
-    <div class="box-border grid grid-cols-2 place-items-center">
+    <div class="box-border grid grid-cols-2 place-items-center" >
       <img class="p-2 box-border w-full" :src="roleimg" />
       <div class="grid grid-rows-2 h-full place-content-between">
         <div class="grid grid-cols-2 place-items-center pr-4 box-border">
           <div class="w-2/3">
             <img class=" box-border w-full" src="@/assets/sword.png" />
           </div>
-          <div class="grid grid-rows-2 w-full">
-            <p v-if="user.weaponSlot[0]" class="box-border text-left py-2 truncate pr-4">
+          <div class="grid grid-rows-2 w-full" v-if="user.weaponSlot[0]">
+            <p  class="box-border text-left py-2 truncate pr-4">
               {{ user.weaponSlot[0].equipmentName }}
             </p>
             <p class=" text-left">攻+{{ user.weaponSlot[0].equipmentAtk }}</p>
@@ -28,8 +28,8 @@
           <div class="p-4">
             <img class="box-border w-full" src="@/assets/armor.png" />
           </div>
-          <div class="grid grid-rows-2 w-full">
-            <p v-if="user.armorSlot[0]" class="box-border text-left py-2 truncate pr-4">
+          <div class="grid grid-rows-2 w-full" v-if="user.armorSlot[0]">
+            <p class="box-border text-left py-2 truncate pr-4">
               {{ user.armorSlot[0].equipmentName }}
             </p>
             <p class=" text-left">防+{{ user.armorSlot[0].equipmentDef }}</p>
@@ -111,15 +111,15 @@ export default {
       } else if (store.state.userContent.role == "Ninja") {
         roleimg.value = require("@/assets/ninja.png");
       }
-      const res = store.getters.doneContent;
+      const res = store.state.userContent;
       for (
         let index = 0;
-        index < store.getters.doneContent.userEquipment.length;
+        index < store.state.userContent.userEquipment.length;
         index++
       ) {
-        if (store.getters.doneContent.userEquipment[index].equipmentType == 1) {
+        if (store.state.userContent.userEquipment[index].equipmentType == 1) {
           res.userEquipment[index].equipmentType = "Weapon";
-        } else if (store.getters.doneContent.userEquipment[index].equipmentType == 2) {
+        } else if (store.state.userContent.userEquipment[index].equipmentType == 2) {
           res.userEquipment[index].equipmentType = "Armor";
         }
       }
@@ -160,7 +160,7 @@ export default {
           armorSlot: armorSlotId,
         })
         .then(() => {
-          store.commit("refresh");
+          store.dispatch("refresh");
         })
         .catch((e) => {
           alert(e.response.data.message);
@@ -176,7 +176,7 @@ export default {
         })
         .then((res) => {
           if (res.data == 1) {
-            store.commit("refresh");
+            store.dispatch("refresh");
             showdelete.value = true;
           } else if (res.data == 0) {
             alert("沒有此裝備，無法刪除");
