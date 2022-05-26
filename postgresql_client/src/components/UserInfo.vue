@@ -55,7 +55,7 @@
 <script>
 import router from "@/router";
 import store from "@/store";
-import HomeSave from "@/components/Homesave";
+import HomeSave from "@/modal/Homesave";
 import axios from "axios";
 import { ref, computed } from "vue";
 

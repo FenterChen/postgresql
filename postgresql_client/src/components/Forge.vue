@@ -1,12 +1,5 @@
 <template>
   <div class="flex">
-    <!-- <div class="p-4 box-border flex flex-col items-center">
-      <img class="p-2 box-border w-4/5" :src="roleimg" />
-      <div class="flex justify-around">
-        <img class="p-2 box-border w-1/5" src="../assets/armor.png" />
-        <p class="box-border flex items-center w-2/5">{{ currentEquip }}</p>
-      </div>
-    </div> -->
     <div class="relative flex shadow-md sm:rounded-lg">
       <div class="m-2">
         <div class="input-group flex mb-4">

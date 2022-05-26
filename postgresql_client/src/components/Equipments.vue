@@ -94,8 +94,8 @@
 
 <script>
 import store from "@/store";
-import Delequipment from "@/components/Delequipment";
-import Editquipment from "@/components/Editquipment";
+import Delequipment from "@/modal/Delequipment";
+import Editquipment from "@/modal/Editquipment";
 import axios from "axios";
 import { ref, computed } from "vue";
 
