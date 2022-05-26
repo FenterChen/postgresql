@@ -21,6 +21,7 @@ data class User(
     @Column(name="armor_slot")var armorSlot: Int?,
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "userId")
+    @OrderBy("equipmentId")
     val userEquipment: MutableList<UserEquipment>?
 )
 

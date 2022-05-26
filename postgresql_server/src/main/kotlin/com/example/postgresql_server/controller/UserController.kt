@@ -63,7 +63,7 @@ class UserController(private val userRepository: UserRepository,private val upda
     @PutMapping("/saver")
     fun saver(@RequestBody userInput: UserInput): UserDto {
         try {
-            updateUser.updateByUserId(userInput.userId,userInput.userName,userInput.role,userInput.weaponSlot,userInput.armorSlot)
+            updateUser.updateByUserId(userInput.userId,userInput.userName,userInput.role)
             val result = userRepository.findByUserId(userInput.userId)
             val weaponSlot = mulEquipmentRepository.equipmentSlot(result.weaponSlot)
             val armorSlot = mulEquipmentRepository.equipmentSlot(result.armorSlot)

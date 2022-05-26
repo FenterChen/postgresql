@@ -4,7 +4,10 @@ import com.example.postgresql_server.model.*
 
 import com.example.postgresql_server.repository.EquipmentRepository
 import com.example.postgresql_server.repository.MulEquipmentRepository
+import com.example.postgresql_server.repository.UserRepository
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
@@ -13,18 +16,41 @@ import org.springframework.web.server.ResponseStatusException
 //@CrossOrigin("http://localhost:3030")建置後
 @CrossOrigin("http://localhost:8081")
 @RequestMapping("/equipment")
-class EquipmentController(private val mulEquipmentRepository: MulEquipmentRepository, private val equipmentRepository: EquipmentRepository) {
+class EquipmentController(private val mulEquipmentRepository: MulEquipmentRepository, private val equipmentRepository: EquipmentRepository,private val userRepository: UserRepository) {
+
+
+    //裝上裝備槽
+    @PutMapping("/useEquipment")
+    fun useEquipment(@RequestBody userInput: UserInput): UserDto {
+        try {
+            mulEquipmentRepository.useEquipment(userInput.userId,userInput.weaponSlot,userInput.armorSlot)
+            val result = userRepository.findByUserId(userInput.userId)
+            println(result)
+            val weaponSlot = mulEquipmentRepository.equipmentSlot(result.weaponSlot)
+            println(weaponSlot)
+            val armorSlot = mulEquipmentRepository.equipmentSlot(result.armorSlot)
+            println(armorSlot)
+            return sendSlotToUserDto(result,weaponSlot,armorSlot)
+        }catch (exception: EmptyResultDataAccessException){
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "會員錯誤")
+        }
+
+    }
 
     //裝備名稱修改
     @PutMapping("/equipmentName")
     fun equipmentName(@RequestBody inputEquipmentName:EquipmentInput){
-        mulEquipmentRepository.equipmentName(inputEquipmentName.userId,inputEquipmentName.equipmentId,inputEquipmentName.equipmentName)
+        inputEquipmentName.equipmentName?.let {
+            mulEquipmentRepository.equipmentName(inputEquipmentName.userId,inputEquipmentName.equipmentId,
+                it)
+        }
     }
 
     //刪除裝備
-    @DeleteMapping("/delEquipment")
-    fun delEquipment(@RequestBody inputEquipmentId:EquipmentInput){
-        mulEquipmentRepository.delEquipment(inputEquipmentId.userId,inputEquipmentId.equipmentId)
+    @PostMapping("/delEquipment")
+    fun delEquipment(@RequestBody inputEquipmentId:EquipmentInput): ResponseEntity<Int> {
+        val result=mulEquipmentRepository.delEquipment(inputEquipmentId.userId,inputEquipmentId.equipmentId)
+        return ResponseEntity.ok().body(result)
     }
 
     //鍛造裝備

@@ -66,7 +66,7 @@ class MulEquipmentRepository {
     }
 
     //刪除裝備
-    fun delEquipment(userId:Int,equipmentId:Int) {
+    fun delEquipment(userId: Int, equipmentId: Int): Int {
         val cb = em!!.criteriaBuilder
         val criteriaDelete: CriteriaDelete<UserEquipment> = cb.createCriteriaDelete(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaDelete.from(UserEquipment::class.java)
@@ -77,6 +77,25 @@ class MulEquipmentRepository {
         )//where userId :userId && equipmentId :equipmentId
 
 
-        em.createQuery(criteriaDelete).executeUpdate()
+        return em.createQuery(criteriaDelete).executeUpdate()
+    }
+
+    //裝上裝備槽
+    fun useEquipment(userId: String,weaponSlot: Int?,armorSlot: Int? ) {
+        val cb = em!!.criteriaBuilder
+        val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
+        val root: Root<User> = criteriaUpdate.from(User::class.java)
+
+        criteriaUpdate.where(
+            cb.equal(root.get<String>("userId"), userId),
+        )//where userId :userId
+
+        criteriaUpdate.set("weaponSlot", weaponSlot)//set value
+        criteriaUpdate.set("armorSlot", armorSlot)//set value
+        val updatedAt = Instant.now()
+        criteriaUpdate.set("updatedAt", updatedAt)//set value
+
+        println(em.createQuery(criteriaUpdate).executeUpdate())
+
     }
 }
