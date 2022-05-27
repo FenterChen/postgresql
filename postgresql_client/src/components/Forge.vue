@@ -1,23 +1,43 @@
 <template>
-  <div class="flex">
-    <div class="relative flex shadow-md sm:rounded-lg">
-      <div class="m-2">
-        <div class="input-group flex mb-4">
-          <input
-            type="search"
-            v-model="newEquip"
-            class="form-control flex-auto min-w-0 block px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-400 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-gray-500 focus:outline-none"
-            aria-label="Search"
-            aria-describedby="button-addon3"
-          />
-          <button
-            @click="Add"
-            class="px-6 py-2 bg-gray-400 border-2 border-gray-500 text-white font-bold text-l leading-tight rounded hover:bg-gray hover:bg-gray-600"
-            type="button"
-            id="button-addon3"
+  <div class="relative grid grid-row-2 shadow-md sm:rounded-lg">
+    <h1 class="text-center text-xl">Click the hammer to forging</h1>
+    <div class="grid grid-cols-2">
+      <div class="m-2 p-6 grid grid-rows-2 place-items-center">
+        <div class="col-span-6 sm:col-span-3">
+          <label for="Type" class="block text-sm font-medium text-gray-700"
+            >Equipment Type</label
           >
-            Forging
-          </button>
+          <select
+            @change="chooseType"
+            id="Type"
+            name="Type"
+            class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          >
+            <option value="1">Weapon</option>
+            <option value="2">Armor</option>
+
+          </select>
+        </div>
+        <div class="col-span-6 sm:col-span-4">
+          <label for="EquipmentName" class="block text-sm font-medium text-gray-700"
+            >Equipment Name</label
+          >
+          <input
+            type="text"
+            v-model="newEquip.name"
+            placeholder="No Name"
+            name="EquipmentName"
+            id="EquipmentName"
+            class="mt-1 py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-gray-300 rounded-md"
+          />
+        </div>
+      </div>
+      <div class="my-4 grid grid-rows-2 place-items-center">
+        <div class="relative right-10 cursor-pointer">
+          <img src="../assets/hammer.svg" class="hammer" @click="Add" />
+        </div>
+        <div class="table">
+          <img src="../assets/table.svg" />
         </div>
       </div>
     </div>
@@ -25,32 +45,73 @@
 </template>
 <script>
 import store from "@/store";
-import { ref, computed } from "vue";
+import { ref,reactive, computed, onMounted } from "vue";
+import { gsap } from "gsap";
 import axios from "axios";
 
 export default {
   setup() {
-    const newEquip = ref();
+    const newEquip = reactive({
+      userid: null,
+      type: 1,
+      name: null,
+    });
+    const equipmentTypeList=ref([
+      {id:1,typename:"Weapon"},
+      {id:2,typename:"Armor"}
+  ])
+
     const user = computed(() => {
       return store.state.userContent;
     });
+
+    const hammar = () => {
+      gsap.to(".hammer", {
+        rotation: 20,
+        y: 20,
+        x: 8,
+        duration: 0.25,
+        repeat: 7,
+        yoyo: true,
+      });
+    };
+    onMounted(() => {
+      newEquip.userid = user.value.id;
+    });
     const Add = () => {
+      hammar();
+      
+      let name;
+      if(newEquip.name==null){
+        name="No Name"
+      }else{
+        name=newEquip.name
+      }
       axios
-        .post("api/Gameusers/adduserdata", {
-          Userid: user.value.userid,
-          Equipment: newEquip.value,
+        // axios.post("http://localhost:8080/equipment/useEquipment",{建置後
+        .post("http://localhost:8080/equipment/forgingEquipment", {
+          userId: newEquip.userid,
+          equipmentType: newEquip.type,
+          equipmentName: name,
         })
         .then(() => {
-          newEquip.value = "";
+          store.dispatch("refresh");
         })
         .catch(function (err) {
           alert(err);
         });
     };
+    const chooseType = () => {
+      let type = parseInt(document.getElementById("Type").value);
+      newEquip.type = type;
+    };
     return {
       user,
       newEquip,
+      equipmentTypeList,
       Add,
+      hammar,
+      chooseType,
     };
   },
 };

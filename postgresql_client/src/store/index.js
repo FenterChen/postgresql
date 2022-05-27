@@ -12,7 +12,6 @@ export default createStore({
       state.userContent = null;
     },
     MuUserContent(state,res) {
-      console.log(res);
       state.userContent = res.data
     },
   },

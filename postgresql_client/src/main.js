@@ -4,5 +4,6 @@ import router from './router'
 import "./assets/tailwind.css";
 import 'flowbite';
 import store from "./store";
+import { gsap } from "gsap";
 
-createApp(App).use(router).use(store).mount('#app');
+createApp(App).use(router).use(store).use(gsap).mount('#app');

@@ -10,18 +10,18 @@
     @cancel="Cancel"
   ></Editquipment>
   <div class="grid grid-cols-2">
-    <div class="box-border grid grid-cols-2 place-items-center" >
+    <div class="box-border grid grid-cols-2 place-items-center">
       <img class="p-2 box-border w-full" :src="roleimg" />
       <div class="grid grid-rows-2 h-full place-content-between">
         <div class="grid grid-cols-2 place-items-center pr-4 box-border">
           <div class="w-2/3">
-            <img class=" box-border w-full" src="@/assets/sword.png" />
+            <img class="box-border w-full" src="@/assets/sword.png" />
           </div>
           <div class="grid grid-rows-2 w-full" v-if="user.weaponSlot[0]">
-            <p  class="box-border text-left py-2 truncate pr-4">
+            <p class="box-border text-left py-2 truncate pr-4">
               {{ user.weaponSlot[0].equipmentName }}
             </p>
-            <p class=" text-left">攻+{{ user.weaponSlot[0].equipmentAtk }}</p>
+            <p class="text-left">攻+{{ user.weaponSlot[0].equipmentAtk }}</p>
           </div>
         </div>
         <div class="grid grid-cols-2 place-items-center pr-4 box-border">
@@ -32,7 +32,7 @@
             <p class="box-border text-left py-2 truncate pr-4">
               {{ user.armorSlot[0].equipmentName }}
             </p>
-            <p class=" text-left">防+{{ user.armorSlot[0].equipmentDef }}</p>
+            <p class="text-left">防+{{ user.armorSlot[0].equipmentDef }}</p>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ import store from "@/store";
 import Delequipment from "@/modal/Delequipment";
 import Editquipment from "@/modal/Editquipment";
 import axios from "axios";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 export default {
   components: {
@@ -106,17 +106,8 @@ export default {
   },
   setup() {
     const user = computed(() => {
-      if (store.state.userContent.role == "Warrior") {
-        roleimg.value = require("@/assets/warrior.png");
-      } else if (store.state.userContent.role == "Ninja") {
-        roleimg.value = require("@/assets/ninja.png");
-      }
       const res = store.state.userContent;
-      for (
-        let index = 0;
-        index < store.state.userContent.userEquipment.length;
-        index++
-      ) {
+      for (let index = 0; index < store.state.userContent.userEquipment.length; index++) {
         if (store.state.userContent.userEquipment[index].equipmentType == 1) {
           res.userEquipment[index].equipmentType = "Weapon";
         } else if (store.state.userContent.userEquipment[index].equipmentType == 2) {
@@ -126,13 +117,20 @@ export default {
       return res;
     });
 
+    onMounted(() => {
+      if (user.value.role == "Warrior") {
+        roleimg.value = require("@/assets/warrior.png");
+      } else if (user.value.role == "Ninja") {
+        roleimg.value = require("@/assets/ninja.png");
+      }
+    });
+
     const currentItem = ref([]);
     const editId = ref();
     const showdedit = ref(true);
     const showdelete = ref(true);
     const deleteId = ref();
     const roleimg = ref();
-
     const useEquipment = (item) => {
       var weaponSlotId = null;
       var armorSlotId = null;

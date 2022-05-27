@@ -63,12 +63,12 @@ class EquipmentController(private val mulEquipmentRepository: MulEquipmentReposi
         return when (computeValue?.get(0)?.equipmentType) {
             "weapon" -> {
                 userEquipment.equipmentAtk = attribute * computeValue[0].equipmentBasicAtk!!//攻擊屬性
-                userEquipment.equipmentName = computeValue[0].equipmentType//初始裝備名稱
+                userEquipment.equipmentName = userEquipment.equipmentName//裝備名稱
                 equipmentRepository.save(userEquipment)
             }
             "armor" -> {
                 userEquipment.equipmentDef = attribute * computeValue[0].equipmentBasicDef!!//防禦屬性
-                userEquipment.equipmentName = computeValue[0].equipmentType//初始裝備名稱
+                userEquipment.equipmentName = userEquipment.equipmentName//裝備名稱
                 equipmentRepository.save(userEquipment)
             }
             else -> {
