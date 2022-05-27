@@ -88,8 +88,7 @@ export default {
         name=newEquip.name
       }
       axios
-        // axios.post("http://localhost:8080/equipment/useEquipment",{建置後
-        .post("http://localhost:8080/equipment/forgingEquipment", {
+        .post(`${process.env.VUE_APP_URL}equipment/forgingEquipment`, {
           userId: newEquip.userid,
           equipmentType: newEquip.type,
           equipmentName: name,

@@ -80,9 +80,8 @@ export default {
     });
 
     const editConfirm = () => {
-      // axios.post("http://localhost:5050/equipment/equipmentName",{建置後
       axios
-        .put("http://localhost:8080/equipment/equipmentName", {
+        .put(`${process.env.VUE_APP_URL}equipment/equipmentName`, {
           userId: item.value.userId,
           equipmentId: item.value.equipmentId,
           equipmentName: item.value.equipmentName,

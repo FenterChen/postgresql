@@ -43,9 +43,11 @@
           class="text-l text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="px-6 py-3 text-center">Type</th>
-            <th scope="col" class="px-6 py-3 border-l-2 text-center">Equipments name</th>
-            <th scope="col" class="px-6 py-3 border-l-2 text-center">Operate</th>
+            <th scope="col" class="py-3 text-center">Id</th>
+            <th scope="col" class="py-3 text-center">Type</th>
+            <th scope="col" class="py-3 text-center">Ability</th>
+            <th scope="col" class="px-6 py-3 text-center">Equipments Name</th>
+            <th scope="col" class="px-6 py-3 text-center">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -55,12 +57,25 @@
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
           >
             <td
-              class="px-6 py-4 font-medium text-gray-900 dark:text-white text-center whitespace-nowrap"
+              class="px-4 py-2 font-medium text-gray-900 dark:text-white text-center whitespace-nowrap"
+            >
+              {{ item.equipmentId }}
+            </td>
+            <td
+              class="px-4 py-2 font-medium text-gray-900 dark:text-white text-center whitespace-nowrap border-l-2"
             >
               {{ item.equipmentType }}
             </td>
             <td
-              class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap flex justify-between items-center border-l-2"
+              class="px-4 py-2 font-medium text-gray-900 dark:text-white text-center whitespace-nowrap border-l-2"
+            >
+              <div class="grid grid-rows-2">
+                <p>Atk +{{ item.equipmentAtk }}</p>
+                <p>Def +{{ item.equipmentDef }}</p>
+              </div>
+            </td>
+            <td
+              class="px-4 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap flex justify-between items-center border-l-2"
             >
               {{ item.equipmentName }}
 
@@ -71,7 +86,7 @@
                 Use
               </button>
             </td>
-            <td class="px-6 py-4 text-center border-l-2">
+            <td class="px-4 py-2 text-center border-l-2">
               <button
                 @click="editCheck(item)"
                 class="my-2 md:my-0 px-4 py-2 mx-2 font-bold bg-cyan text-white rounded-full"
@@ -150,9 +165,8 @@ export default {
       } else if (item.equipmentType == "Weapon") {
         weaponSlotId = item.equipmentId;
       }
-      // axios.post("http://localhost:8080/equipment/useEquipment",{建置後
       axios
-        .put("http://localhost:8080/equipment/useEquipment", {
+        .put(`${process.env.VUE_APP_URL}equipment/useEquipment`, {
           userId: user.value.userId,
           weaponSlot: weaponSlotId,
           armorSlot: armorSlotId,
@@ -168,7 +182,7 @@ export default {
     const deleteConfirm = () => {
       // axios.post("http://localhost:5050/equipment/delEquipment",{建置後
       axios
-        .post("http://localhost:8080/equipment/delEquipment", {
+        .post(`${process.env.VUE_APP_URL}equipment/delEquipment`, {
           userId: user.value.id,
           equipmentId: deleteId.value,
         })

@@ -9,21 +9,21 @@
               class="justify-center py-1 mx-2 shadow-sm text-sm font-medium text-black hover:text-sky-500"
               :class="{ ' border-b-2 border-sky': infoIsclick }"
             >
-              UserInfo
+              <div class="text-base">UserInfo</div>
             </button>
             <button
               @click="showEquip"
               class="justify-center py-1 mx-2 shadow-sm text-sm font-medium text-black hover:text-sky-500"
               :class="{ ' border-b-2 border-sky': equipIsclick }"
             >
-              Equipments
+              <div class="text-base">Equipments</div>
             </button>
             <button
               @click="showForge"
               class="justify-center py-1 mx-2 shadow-sm text-sm font-medium text-black hover:text-sky-500"
               :class="{ ' border-b-2 border-sky': forgeIsclick }"
             >
-              Forge
+              <div class="text-base">Forge Plant</div>
             </button>
           </div>
           <div v-if="infoIsclick" class="px-4 py-5 bg-white sm:p-6">
@@ -56,9 +56,8 @@ export default {
   },
   setup() {
     const personal = JSON.parse(localStorage.getItem("personallogin"));
-    // axios.post("http://localhost:5050/api/personal",{建置後
     axios
-      .post("http://localhost:8080/api/personal", {
+      .post(`${process.env.VUE_APP_URL}api/personal`, {
         userId: personal.userId,
       })
       .then((res) => {

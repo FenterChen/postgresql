@@ -12,8 +12,7 @@ import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
-//@CrossOrigin("http://localhost:3030")建置後
-@CrossOrigin("http://localhost:8081")
+@CrossOrigin("http://localhost:3030")
 @RequestMapping("/api")
 class UserController(private val userRepository: UserRepository,private val updateUser: UpdateUser,private val mulEquipmentRepository: MulEquipmentRepository) {
 

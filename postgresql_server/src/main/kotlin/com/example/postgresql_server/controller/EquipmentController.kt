@@ -13,8 +13,7 @@ import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
-//@CrossOrigin("http://localhost:3030")建置後
-@CrossOrigin("http://localhost:8081")
+@CrossOrigin("http://localhost:3030")
 @RequestMapping("/equipment")
 class EquipmentController(private val mulEquipmentRepository: MulEquipmentRepository, private val equipmentRepository: EquipmentRepository,private val userRepository: UserRepository) {
 

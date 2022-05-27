@@ -77,9 +77,8 @@ export default {
           validationErrors.value.push("Password cannot be empty");
         }
       } else {
-        // axios.post("http://localhost:5050/api/login",{建置後
         axios
-          .post("http://localhost:8080/api/login", {
+          .post(`${process.env.VUE_APP_URL}api/login`, {
             userId: user.id,
             password: user.password,
           })
@@ -91,7 +90,7 @@ export default {
             alert(e.response.data.message);
             if (e.response.data.message == "帳號輸入錯誤，為方便測試直接建立帳號密碼") {
               axios
-                .post("http://localhost:8080/api/register", {
+                .post(`${process.env.VUE_APP_URL}pi/register`, {
                   userId: user.id,
                   password: user.password,
                 })

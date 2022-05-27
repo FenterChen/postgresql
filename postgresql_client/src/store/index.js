@@ -18,7 +18,7 @@ export default createStore({
   actions: {
     refresh(context){
       axios
-      .post("http://localhost:8080/api/personal", {
+      .post(`${process.env.VUE_APP_URL}api/personal`, {
         userId: context.state.userContent.userId,
       })
       .then((res) => {

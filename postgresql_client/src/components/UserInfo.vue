@@ -70,8 +70,7 @@ export default {
     const rightOpen = ref(true);
     const save = () => {
       axios
-        // .post("http://localhost:5050/saveuser",{建置後
-        .put("http://localhost:8080/api/saver", {
+        .put(`${process.env.VUE_APP_URL}api/saver`, {
           userId: user.value.userId,
           userName: user.value.userName,
           role: user.value.role,
