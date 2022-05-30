@@ -5,7 +5,6 @@ import com.example.postgresql_server.input.User
 import com.example.postgresql_server.input.UserEquipment
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import java.time.Instant
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.persistence.TypedQuery
@@ -81,21 +80,21 @@ class MulEquipmentRepository {
     }
 
     //裝上裝備槽
-    fun useEquipment(userId: String,weaponSlot: Int?,armorSlot: Int? ) {
+    @Transactional
+    fun useEquipment(id: Int, weaponSlot: Int, armorSlot: Int): Int {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
         val root: Root<User> = criteriaUpdate.from(User::class.java)
 
         criteriaUpdate.where(
-            cb.equal(root.get<String>("userId"), userId),
-        )//where userId :userId
+            cb.equal(root.get<Int>("id"), id),
+        )//where userId :userId && equipmentId :equipmentId
 
         criteriaUpdate.set("weaponSlot", weaponSlot)//set value
         criteriaUpdate.set("armorSlot", armorSlot)//set value
-        val updatedAt = Instant.now()
-        criteriaUpdate.set("updatedAt", updatedAt)//set value
 
-        println(em.createQuery(criteriaUpdate).executeUpdate())
-
+        return em.createQuery(criteriaUpdate).executeUpdate()
     }
 }
+
+

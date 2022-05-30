@@ -15,21 +15,21 @@ data class User(
     @Column(name="user_name") var userName: String?,
     @Column var password: String,
     @Column var role: String?,
-    @Column(name="created_at") val createdAt: Instant= now(),
-    @Column(name="updated_at") var updatedAt: Instant= now(),
 
-    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name="weapon_slot")
-    val weaponSlotList: UserEquipment?,
+    var weaponSlot: UserEquipment?= null,
 
-    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name="armor_slot")
-    val armorSlotList: UserEquipment?,
+    var armorSlot: UserEquipment? = null,
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "userId")
     @OrderBy("equipmentId")
-    val userEquipment: MutableList<UserEquipment>?
-)
+    val userEquipment: MutableList<UserEquipment>?,
 
+    @Column(name="created_at") val createdAt: Instant= now(),
+    @Column(name="updated_at") var updatedAt: Instant= now()
+)
 
 

@@ -1,12 +1,10 @@
 package com.example.postgresql_server.controller
 
-import com.example.postgresql_server.dto.UserDto
-import com.example.postgresql_server.dto.sendSlotToUserDto
-import com.example.postgresql_server.input.*
 
+import com.example.postgresql_server.input.*
 import com.example.postgresql_server.repository.EquipmentRepository
 import com.example.postgresql_server.repository.MulEquipmentRepository
-import com.example.postgresql_server.repository.UserRepository
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,26 +15,24 @@ import org.springframework.web.server.ResponseStatusException
 @RestController
 @CrossOrigin("http://localhost:8081")
 @RequestMapping("/equipment")
-class EquipmentController(private val mulEquipmentRepository: MulEquipmentRepository, private val equipmentRepository: EquipmentRepository,private val userRepository: UserRepository) {
+class EquipmentController(private val mulEquipmentRepository: MulEquipmentRepository, private val equipmentRepository: EquipmentRepository) {
 
 
     //裝上裝備槽
-//    @PutMapping("/useEquipment")
-//    fun useEquipment(@RequestBody userInput: UserInput): UserDto {
-//        try {
-//            mulEquipmentRepository.useEquipment(userInput.userId,userInput.weaponSlot,userInput.armorSlot)
-//            val result = userRepository.findByUserId(userInput.userId)
-//            println(result)
-//            val weaponSlot = mulEquipmentRepository.equipmentSlot(result.weaponSlot)
-//            println(weaponSlot)
-//            val armorSlot = mulEquipmentRepository.equipmentSlot(result.armorSlot)
-//            println(armorSlot)
-//            return sendSlotToUserDto(result,weaponSlot,armorSlot)
-//        }catch (exception: EmptyResultDataAccessException){
-//            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "會員錯誤")
-//        }
-//
-//    }
+    @PutMapping("/useEquipment")
+    fun useEquipment(@RequestBody userInput: UserInput): ResponseEntity<Int> {
+        try {
+            val result= mulEquipmentRepository.useEquipment(userInput.id,userInput.weaponSlot,userInput.armorSlot)
+            if(result!=0){
+                return ResponseEntity.ok().body(result)
+            }else{
+                throw ResponseStatusException(HttpStatus.NOT_FOUND)
+            }
+        }catch (exception: DataIntegrityViolationException){
+            throw exception
+        }
+
+    }
 
     //裝備名稱修改
     @PutMapping("/equipmentName")

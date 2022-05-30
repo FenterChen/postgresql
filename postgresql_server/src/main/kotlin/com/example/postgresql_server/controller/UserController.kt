@@ -2,18 +2,14 @@ package com.example.postgresql_server.controller
 
 import com.example.postgresql_server.dto.UserDto
 import com.example.postgresql_server.dto.UserIdDto
-import com.example.postgresql_server.dto.sendSlotToUserDto
-import com.example.postgresql_server.dto.sendToUserDto
+import com.example.postgresql_server.dto.userConvertDto
 import com.example.postgresql_server.input.*
-import com.example.postgresql_server.repository.MulEquipmentRepository
-
 import com.example.postgresql_server.repository.UpdateUser
 import com.example.postgresql_server.repository.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import javax.persistence.criteria.CriteriaUpdate
 
 
 @RestController
@@ -22,7 +18,6 @@ import javax.persistence.criteria.CriteriaUpdate
 class UserController(
     private val userRepository: UserRepository,
     private val updateUser: UpdateUser,
-    private val mulEquipmentRepository: MulEquipmentRepository,
 ) {
 
     //取回所有會員
@@ -31,15 +26,15 @@ class UserController(
         userRepository.findAll()
 
     //會員登入
-//    @PostMapping("/login")
-//    fun login(@RequestBody userLogin: User): UserIdDto {
-//        try {
-//            val result = userRepository.findAllByUserIdAndPassword(userLogin.userId, userLogin.password)
-//            return UserIdDto(result.userId)
-//        } catch (exception: EmptyResultDataAccessException) {
-//            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "帳號密碼輸入錯誤，為方便測試直接建立帳號密碼")
-//        }
-//    }
+    @PostMapping("/login")
+    fun login(@RequestBody userLogin: User): UserIdDto {
+        try {
+            val result = userRepository.findAllByUserIdAndPassword(userLogin.userId, userLogin.password)
+            return UserIdDto(result.userId)
+        } catch (exception: EmptyResultDataAccessException) {
+            throw exception
+        }
+    }
 
     //會員註冊
     @PostMapping("/register")
@@ -49,32 +44,29 @@ class UserController(
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "已有此會員，請重新輸入")
         } catch (exception: EmptyResultDataAccessException) {
             val res = userRepository.save(register)
-            return sendToUserDto(res)
+            return userConvertDto(res)
         }
 
     }
 
     //取會員資料
-//    @PostMapping("/personal")
-//    fun personal(@RequestBody personal: UserIdDto): UserDto {
-//        try {
-//            val result = userRepository.findByUserId(personal.userId)
-//            val weaponSlot = mulEquipmentRepository.equipmentSlot(result.weaponSlot)
-//            val armorSlot = mulEquipmentRepository.equipmentSlot(result.armorSlot)
-//            return sendSlotToUserDto(result, weaponSlot, armorSlot)
-//        } catch (exception: EmptyResultDataAccessException) {
-//            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "會員錯誤")
-//        }
-//    }
+    @PostMapping("/personal")
+    fun personal(@RequestBody personal: UserIdDto): User {
+        try {
+            return userRepository.findByUserId(personal.userId)
+        } catch (exception: EmptyResultDataAccessException) {
+            throw exception
+        }
+    }
 
     //更新會員資料
     @PutMapping("/saver")
     fun saver(@RequestBody userInput: UserInput): UserDto {
         try {
             val res= updateUser.updateByUserId(userInput.id, userInput.userName, userInput.role)
-            return sendSlotToUserDto(res)
-        } catch (exception: EmptyResultDataAccessException) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "會員錯誤")
+            return userConvertDto(res)
+        } catch (exception: NullPointerException) {
+            throw exception
         }
 
     }

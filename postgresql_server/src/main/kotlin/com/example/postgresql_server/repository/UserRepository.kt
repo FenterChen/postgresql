@@ -1,6 +1,5 @@
 package com.example.postgresql_server.repository
 
-import com.example.postgresql_server.dto.sendSlotToUserDto
 import com.example.postgresql_server.input.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
@@ -13,13 +12,12 @@ import javax.transaction.Transactional
 @Repository
 interface UserRepository : JpaRepository<User, Int> {
     fun findAllByUserIdAndPassword(userId: String, password: String): User
-    fun findByUserId(userId: String): User
+    fun findByUserId(userId: String):User
 }
 
 //更新會員資料
 @Repository
-
-class UpdateUser(private val mulEquipmentRepository: MulEquipmentRepository) {
+class UpdateUser {
     @PersistenceContext
     private lateinit var em: EntityManager
 
