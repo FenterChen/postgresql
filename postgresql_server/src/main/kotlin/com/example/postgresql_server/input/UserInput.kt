@@ -1,7 +1,7 @@
-package com.example.postgresql_server.model
+package com.example.postgresql_server.input
 
 data class UserInput (
-    val userId:String="",
+    val id:Int=0,
     val userName:String?="",
     val role:String?="",
     val weaponSlot: Int=0,

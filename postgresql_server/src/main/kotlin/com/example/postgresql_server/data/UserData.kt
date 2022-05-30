@@ -1,4 +1,4 @@
-package com.example.postgresql_server.model
+package com.example.postgresql_server.input
 
 
 
@@ -16,9 +16,15 @@ data class User(
     @Column var password: String,
     @Column var role: String?,
     @Column(name="created_at") val createdAt: Instant= now(),
-    @Column(name="updated_at") val updatedAt: Instant= now(),
-    @Column(name="weapon_slot")var weaponSlot: Int?,
-    @Column(name="armor_slot")var armorSlot: Int?,
+    @Column(name="updated_at") var updatedAt: Instant= now(),
+
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @JoinColumn(name="weapon_slot")
+    val weaponSlotList: UserEquipment?,
+
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @JoinColumn(name="armor_slot")
+    val armorSlotList: UserEquipment?,
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "userId")
     @OrderBy("equipmentId")

@@ -81,6 +81,7 @@
 
               <button
                 @click="useEquipment(item)"
+                disabled:opacity-75
                 class="px-4 py-2 mx-4 font-bold bg-regal-blue text-white rounded-full"
               >
                 Use

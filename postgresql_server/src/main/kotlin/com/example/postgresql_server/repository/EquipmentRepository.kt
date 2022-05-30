@@ -1,8 +1,8 @@
 package com.example.postgresql_server.repository
 
-import com.example.postgresql_server.model.EquipmentType
-import com.example.postgresql_server.model.User
-import com.example.postgresql_server.model.UserEquipment
+import com.example.postgresql_server.input.EquipmentType
+import com.example.postgresql_server.input.User
+import com.example.postgresql_server.input.UserEquipment
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.time.Instant
@@ -18,14 +18,13 @@ interface EquipmentRepository : JpaRepository<UserEquipment, Int>
 
 //criteria
 @Repository
-@Transactional
 class MulEquipmentRepository {
     @PersistenceContext
-    private val em: EntityManager? = null
+    private lateinit var em: EntityManager
 
     //查詢裝備表並取初始值
     fun forgingEquipment(id:Int): MutableList<EquipmentType>? {
-        val cb = em!!.criteriaBuilder
+        val cb = em.criteriaBuilder
         val cq: CriteriaQuery<EquipmentType> = cb.createQuery(EquipmentType::class.java) // select UserEquipment
         val root: Root<EquipmentType> = cq.from(EquipmentType::class.java) // from UserEquipment
 
@@ -38,7 +37,7 @@ class MulEquipmentRepository {
 
     //查詢武器與裝備槽
     fun equipmentSlot(slot:Int?): MutableList<UserEquipment>? {
-        val cb = em!!.criteriaBuilder
+        val cb = em.criteriaBuilder
         val cq: CriteriaQuery<UserEquipment> = cb.createQuery(UserEquipment::class.java) // select UserEquipment
         val root: Root<UserEquipment> = cq.from(UserEquipment::class.java) // from UserEquipment
 
@@ -50,8 +49,9 @@ class MulEquipmentRepository {
     }
 
     //修改武器與裝備名稱
+    @Transactional
     fun equipmentName(userId:Int,equipmentId:Int,equipmentName:String) {
-        val cb = em!!.criteriaBuilder
+        val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<UserEquipment> = cb.createCriteriaUpdate(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaUpdate.from(UserEquipment::class.java)
 
@@ -64,10 +64,10 @@ class MulEquipmentRepository {
 
         em.createQuery(criteriaUpdate).executeUpdate()
     }
-
+    @Transactional
     //刪除裝備
     fun delEquipment(userId: Int, equipmentId: Int): Int {
-        val cb = em!!.criteriaBuilder
+        val cb = em.criteriaBuilder
         val criteriaDelete: CriteriaDelete<UserEquipment> = cb.createCriteriaDelete(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaDelete.from(UserEquipment::class.java)
 
@@ -82,7 +82,7 @@ class MulEquipmentRepository {
 
     //裝上裝備槽
     fun useEquipment(userId: String,weaponSlot: Int?,armorSlot: Int? ) {
-        val cb = em!!.criteriaBuilder
+        val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
         val root: Root<User> = criteriaUpdate.from(User::class.java)
 

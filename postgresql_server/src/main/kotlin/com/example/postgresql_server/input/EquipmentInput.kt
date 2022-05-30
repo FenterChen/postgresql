@@ -1,4 +1,4 @@
-package com.example.postgresql_server.model
+package com.example.postgresql_server.input
 
 
 data class EquipmentInput (
