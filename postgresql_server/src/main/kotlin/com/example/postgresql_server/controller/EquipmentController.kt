@@ -5,7 +5,6 @@ import com.example.postgresql_server.input.*
 import com.example.postgresql_server.repository.EquipmentRepository
 import com.example.postgresql_server.repository.MulEquipmentRepository
 import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -38,7 +37,7 @@ class EquipmentController(private val mulEquipmentRepository: MulEquipmentReposi
     @PutMapping("/equipmentName")
     fun equipmentName(@RequestBody inputEquipmentName:EquipmentInput){
         inputEquipmentName.equipmentName?.let {
-            mulEquipmentRepository.equipmentName(inputEquipmentName.userId,inputEquipmentName.equipmentId,
+            mulEquipmentRepository.updateEquipmentName(inputEquipmentName.userId,inputEquipmentName.equipmentId,
                 it)
         }
     }
@@ -54,7 +53,7 @@ class EquipmentController(private val mulEquipmentRepository: MulEquipmentReposi
     @PostMapping("/forgingEquipment")
     fun forgingEquipment(@RequestBody userEquipment: UserEquipment): UserEquipment {
         val computeValue: MutableList<EquipmentType>? =
-            mulEquipmentRepository.forgingEquipment(userEquipment.equipmentType)
+            mulEquipmentRepository.findEquipmentType(userEquipment.equipmentType)
         val attribute = (1..50).random()//屬性值跑隨機
 
         return when (computeValue?.get(0)?.equipmentType) {

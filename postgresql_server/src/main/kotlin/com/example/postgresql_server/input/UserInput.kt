@@ -5,6 +5,6 @@ data class UserInput (
     var userId: String?="",
     val userName:String?="",
     val role:String?="",
-    val weaponSlot: Int=0,
-    val armorSlot: Int=0,
+    val weaponSlot: Int?=null,
+    val armorSlot: Int?=null,
     )

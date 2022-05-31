@@ -17,22 +17,22 @@
           <div class="w-2/3">
             <img class="box-border w-full" src="@/assets/sword.png" />
           </div>
-          <div class="grid grid-rows-2 w-full" v-if="user.weaponSlot[0]">
+          <div class="grid grid-rows-2 w-full" v-if="user.weaponSlot">
             <p class="box-border text-left py-2 truncate pr-4">
-              {{ user.weaponSlot[0].equipmentName }}
+              {{ user.weaponSlot.equipmentName }}
             </p>
-            <p class="text-left">攻+{{ user.weaponSlot[0].equipmentAtk }}</p>
+            <p class="text-left">攻+{{ user.weaponSlot.equipmentAtk }}</p>
           </div>
         </div>
         <div class="grid grid-cols-2 place-items-center pr-4 box-border">
           <div class="p-4">
             <img class="box-border w-full" src="@/assets/armor.png" />
           </div>
-          <div class="grid grid-rows-2 w-full" v-if="user.armorSlot[0]">
+          <div class="grid grid-rows-2 w-full" v-if="user.armorSlot">
             <p class="box-border text-left py-2 truncate pr-4">
-              {{ user.armorSlot[0].equipmentName }}
+              {{ user.armorSlot.equipmentName }}
             </p>
-            <p class="text-left">防+{{ user.armorSlot[0].equipmentDef }}</p>
+            <p class="text-left">防+{{ user.armorSlot.equipmentDef }}</p>
           </div>
         </div>
       </div>
@@ -151,14 +151,14 @@ export default {
       var weaponSlotId = null;
       var armorSlotId = null;
 
-      if (user.value.weaponSlot[0]) {
-        weaponSlotId = user.value.weaponSlot[0].equipmentId;
-      } else if (user.value.armorSlot[0]) {
-        armorSlotId = user.value.armorSlot[0].equipmentId;
+      if (user.value.weaponSlot) {
+        weaponSlotId = user.value.weaponSlot.equipmentId;
+      } else if (user.value.armorSlot) {
+        armorSlotId = user.value.armorSlot.equipmentId;
       }
-      if (user.value.weaponSlot[0] && user.value.armorSlot[0]) {
-        weaponSlotId = user.value.weaponSlot[0].equipmentId;
-        armorSlotId = user.value.armorSlot[0].equipmentId;
+      if (user.value.weaponSlot && user.value.armorSlot) {
+        weaponSlotId = user.value.weaponSlot.equipmentId;
+        armorSlotId = user.value.armorSlot.equipmentId;
       }
 
       if (item.equipmentType == "Armor") {
@@ -168,7 +168,7 @@ export default {
       }
       axios
         .put(`${process.env.VUE_APP_URL}equipment/useEquipment`, {
-          userId: user.value.userId,
+          id: user.value.id,
           weaponSlot: weaponSlotId,
           armorSlot: armorSlotId,
         })

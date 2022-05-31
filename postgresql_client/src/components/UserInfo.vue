@@ -71,7 +71,7 @@ export default {
     const save = () => {
       axios
         .put(`${process.env.VUE_APP_URL}api/saver`, {
-          userId: user.value.userId,
+          id: user.value.id,
           userName: user.value.userName,
           role: user.value.role,
         })

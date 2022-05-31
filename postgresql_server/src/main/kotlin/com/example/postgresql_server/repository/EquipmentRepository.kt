@@ -22,7 +22,7 @@ class MulEquipmentRepository {
     private lateinit var em: EntityManager
 
     //查詢裝備表並取初始值
-    fun forgingEquipment(id:Int): MutableList<EquipmentType>? {
+    fun findEquipmentType(id:Int): MutableList<EquipmentType>? {
         val cb = em.criteriaBuilder
         val cq: CriteriaQuery<EquipmentType> = cb.createQuery(EquipmentType::class.java) // select UserEquipment
         val root: Root<EquipmentType> = cq.from(EquipmentType::class.java) // from UserEquipment
@@ -34,22 +34,9 @@ class MulEquipmentRepository {
         return tq.resultList
     }
 
-    //查詢武器與裝備槽
-    fun equipmentSlot(slot:Int?): MutableList<UserEquipment>? {
-        val cb = em.criteriaBuilder
-        val cq: CriteriaQuery<UserEquipment> = cb.createQuery(UserEquipment::class.java) // select UserEquipment
-        val root: Root<UserEquipment> = cq.from(UserEquipment::class.java) // from UserEquipment
-
-        val slot: Predicate = cb.equal(root.get<Int>("equipmentId"), slot)
-
-        cq.where(slot) // where equipment_id = :slot
-        val tq: TypedQuery<UserEquipment> = em.createQuery<UserEquipment>(cq)
-        return tq.resultList
-    }
-
     //修改武器與裝備名稱
     @Transactional
-    fun equipmentName(userId:Int,equipmentId:Int,equipmentName:String) {
+    fun updateEquipmentName(userId:Int,equipmentId:Int,equipmentName:String) {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<UserEquipment> = cb.createCriteriaUpdate(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaUpdate.from(UserEquipment::class.java)
@@ -81,7 +68,7 @@ class MulEquipmentRepository {
 
     //裝上裝備槽
     @Transactional
-    fun useEquipment(id: Int, weaponSlot: Int, armorSlot: Int): Int {
+    fun useEquipment(id: Int, weaponSlot: Int?, armorSlot: Int?): Int {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
         val root: Root<User> = criteriaUpdate.from(User::class.java)
