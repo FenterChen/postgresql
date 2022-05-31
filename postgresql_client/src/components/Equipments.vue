@@ -75,16 +75,29 @@
               </div>
             </td>
             <td
-              class="px-4 py-2 font-medium text-gray-900 dark:text-white whitespace-nowrap flex justify-between items-center border-l-2"
+              class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap box-border flex justify-between items-center border-l-2"
             >
               {{ item.equipmentName }}
 
               <button
                 @click="useEquipment(item)"
-                disabled:opacity-75
                 class="px-4 py-2 mx-4 font-bold bg-regal-blue text-white rounded-full"
+                v-if="
+                  item.equipmentId != user.weaponSlot.equipmentId &&
+                  item.equipmentId != user.armorSlot.equipmentId
+                "
               >
                 Use
+              </button>
+              <button
+                @click="useEquipment(item)"
+                class="px-4 py-2 mx-4 font-bold bg-gray-400 text-white rounded-full cursor-not-allowed"
+                v-if="
+                  item.equipmentId == user.weaponSlot.equipmentId ||
+                  item.equipmentId == user.armorSlot.equipmentId
+                "
+              >
+                Used
               </button>
             </td>
             <td class="px-4 py-2 text-center border-l-2">
@@ -130,6 +143,13 @@ export default {
           res.userEquipment[index].equipmentType = "Armor";
         }
       }
+      if (store.state.userContent.weaponSlot == null) {
+        res.weaponSlot = 0;
+      }
+      if (store.state.userContent.armorSlot == null) {
+        res.armorSlot = 0;
+      }
+
       return res;
     });
 
@@ -147,6 +167,8 @@ export default {
     const showdelete = ref(true);
     const deleteId = ref();
     const roleimg = ref();
+    const useOrNot = ref(true);
+
     const useEquipment = (item) => {
       var weaponSlotId = null;
       var armorSlotId = null;
@@ -220,6 +242,7 @@ export default {
       showdedit,
       showdelete,
       roleimg,
+      useOrNot,
       useEquipment,
       editCheck,
       deleteCheck,

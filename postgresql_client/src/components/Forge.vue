@@ -1,5 +1,10 @@
 <template>
   <div class="relative grid grid-row-2 shadow-md sm:rounded-lg">
+    <ShowNewEquipment
+      :Open="rightOpen"
+      :item="showNewItem"
+      @update="selfConfirm"
+    ></ShowNewEquipment>
     <h1 class="text-center text-xl">Click the hammer to forging</h1>
     <div class="grid grid-cols-2">
       <div class="m-2 p-6 grid grid-rows-2 place-items-center">
@@ -15,7 +20,6 @@
           >
             <option value="1">Weapon</option>
             <option value="2">Armor</option>
-
           </select>
         </div>
         <div class="col-span-6 sm:col-span-4">
@@ -45,21 +49,28 @@
 </template>
 <script>
 import store from "@/store";
-import { ref,reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { gsap } from "gsap";
 import axios from "axios";
+import ShowNewEquipment from "@/modal/ShowNewEquipment";
 
 export default {
+  components: {
+    ShowNewEquipment,
+  },
   setup() {
+    const rightOpen = ref(true);
+    const showNewItem = ref([]);
+
     const newEquip = reactive({
       userid: null,
       type: 1,
       name: null,
     });
-    const equipmentTypeList=ref([
-      {id:1,typename:"Weapon"},
-      {id:2,typename:"Armor"}
-  ])
+    const equipmentTypeList = ref([
+      { id: 1, typename: "Weapon" },
+      { id: 2, typename: "Armor" },
+    ]);
 
     const user = computed(() => {
       return store.state.userContent;
@@ -80,37 +91,47 @@ export default {
     });
     const Add = () => {
       hammar();
-      
+
       let name;
-      if(newEquip.name==null){
-        name="No Name"
-      }else{
-        name=newEquip.name
+      if (newEquip.name == null) {
+        name = "No Name";
+      } else {
+        name = newEquip.name;
       }
-      axios
-        .post(`${process.env.VUE_APP_URL}equipment/forgingEquipment`, {
-          userId: newEquip.userid,
-          equipmentType: newEquip.type,
-          equipmentName: name,
-        })
-        .then(() => {
-          store.dispatch("refresh");
-        })
-        .catch(function (err) {
-          alert(err);
-        });
+      setTimeout(() => {
+        axios
+          .post(`${process.env.VUE_APP_URL}equipment/forgingEquipment`, {
+            userId: newEquip.userid,
+            equipmentType: newEquip.type,
+            equipmentName: name,
+          })
+          .then((res) => {
+            showNewItem.value = res.data;
+            rightOpen.value = false;
+            store.dispatch("refresh");
+          })
+          .catch(function (err) {
+            alert(err);
+          });
+      }, 2000);
     };
     const chooseType = () => {
       let type = parseInt(document.getElementById("Type").value);
       newEquip.type = type;
     };
+    const selfConfirm = () => {
+      rightOpen.value = true;
+    };
     return {
       user,
       newEquip,
       equipmentTypeList,
+      rightOpen,
+      showNewItem,
       Add,
       hammar,
       chooseType,
+      selfConfirm,
     };
   },
 };
