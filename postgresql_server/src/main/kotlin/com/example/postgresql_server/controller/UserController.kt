@@ -13,13 +13,12 @@ import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
-@CrossOrigin("http://localhost:8081")
+//@CrossOrigin("http://localhost:8081")
 @RequestMapping("/api")
 class UserController(
     private val userRepository: UserRepository,
     private val updateUser: UpdateUser,
 ) {
-
     //取回所有會員
     @GetMapping
     fun allUsers(): MutableList<User> =

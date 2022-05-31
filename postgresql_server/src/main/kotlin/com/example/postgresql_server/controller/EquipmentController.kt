@@ -10,9 +10,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-
 @RestController
-@CrossOrigin("http://localhost:8081")
+//@CrossOrigin("http://localhost:8081")
 @RequestMapping("/equipment")
 class EquipmentController(private val mulEquipmentRepository: MulEquipmentRepository, private val equipmentRepository: EquipmentRepository) {
 
