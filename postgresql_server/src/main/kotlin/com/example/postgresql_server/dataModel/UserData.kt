@@ -7,9 +7,9 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "game_user")
+@Table(name = "game_user", schema = "daniel")
 data class User(
-    @Id @GeneratedValue val id: Int,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Int,
     @Column(name = "user_id") var userId: String,
     @Column(name = "user_name") var userName: String?,
     @Column var password: String,
