@@ -1,10 +1,11 @@
 package com.example.postgresql_server.controller
 
+import com.example.postgresql_server.dataModel.User
 import com.example.postgresql_server.dto.UserDto
 import com.example.postgresql_server.dto.UserIdDto
 import com.example.postgresql_server.dto.userConvertDto
 import com.example.postgresql_server.input.*
-import com.example.postgresql_server.repository.UpdateUser
+import com.example.postgresql_server.repository.UserByEm
 import com.example.postgresql_server.repository.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
@@ -13,11 +14,10 @@ import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
-//@CrossOrigin("http://localhost:8081")
 @RequestMapping("/api")
 class UserController(
     private val userRepository: UserRepository,
-    private val updateUser: UpdateUser,
+    private val userByEm: UserByEm,
 ) {
     //取回所有會員
     @GetMapping
@@ -37,15 +37,14 @@ class UserController(
 
     //會員註冊
     @PostMapping("/register")
-    fun register(@RequestBody register: User): UserDto {
+    fun register(@RequestBody register: User): UserIdDto {
         try {
             userRepository.findByUserId(register.userId)
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "已有此會員，請重新輸入")
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
         } catch (exception: EmptyResultDataAccessException) {
-            val res = userRepository.save(register)
-            return userConvertDto(res)
+            val result = userRepository.save(register)
+            return UserIdDto(result.userId)
         }
-
     }
 
     //取會員資料
@@ -62,7 +61,7 @@ class UserController(
     @PutMapping("/saver")
     fun saver(@RequestBody userInput: UserInput): UserDto {
         try {
-            val res= updateUser.updateByUserId(userInput.id, userInput.userName, userInput.role)
+            val res = userByEm.updateByUserId(userInput.id, userInput.userName, userInput.role)
             return userConvertDto(res)
         } catch (exception: NullPointerException) {
             throw exception

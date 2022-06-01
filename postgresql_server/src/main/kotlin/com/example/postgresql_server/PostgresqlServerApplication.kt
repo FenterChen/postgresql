@@ -7,7 +7,7 @@ import org.springframework.boot.runApplication
 class PostgresqlServerApplication
 
 fun main(args: Array<String>) {
-	runApplication<PostgresqlServerApplication>(*args)
+    runApplication<PostgresqlServerApplication>(*args)
 }
 
 

@@ -1,8 +1,8 @@
 package com.example.postgresql_server.repository
 
-import com.example.postgresql_server.input.EquipmentType
-import com.example.postgresql_server.input.User
-import com.example.postgresql_server.input.UserEquipment
+import com.example.postgresql_server.dataModel.EquipmentType
+import com.example.postgresql_server.dataModel.User
+import com.example.postgresql_server.dataModel.UserEquipment
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import javax.persistence.EntityManager
@@ -17,12 +17,12 @@ interface EquipmentRepository : JpaRepository<UserEquipment, Int>
 
 //criteria
 @Repository
-class MulEquipmentRepository {
+class EquipmentByEm {
     @PersistenceContext
     private lateinit var em: EntityManager
 
     //查詢裝備表並取初始值
-    fun findEquipmentType(id:Int): MutableList<EquipmentType>? {
+    fun findEquipmentType(id: Int): MutableList<EquipmentType>? {
         val cb = em.criteriaBuilder
         val cq: CriteriaQuery<EquipmentType> = cb.createQuery(EquipmentType::class.java) // select UserEquipment
         val root: Root<EquipmentType> = cq.from(EquipmentType::class.java) // from UserEquipment
@@ -36,7 +36,7 @@ class MulEquipmentRepository {
 
     //修改武器與裝備名稱
     @Transactional
-    fun updateEquipmentName(userId:Int,equipmentId:Int,equipmentName:String) {
+    fun updateEquipmentName(userId: Int, equipmentId: Int, equipmentName: String) {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<UserEquipment> = cb.createCriteriaUpdate(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaUpdate.from(UserEquipment::class.java)
@@ -50,6 +50,7 @@ class MulEquipmentRepository {
 
         em.createQuery(criteriaUpdate).executeUpdate()
     }
+
     @Transactional
     //刪除裝備
     fun delEquipment(userId: Int, equipmentId: Int): Int {
@@ -68,7 +69,7 @@ class MulEquipmentRepository {
 
     //裝上裝備槽
     @Transactional
-    fun useEquipment(id: Int, weaponSlot: Int?, armorSlot: Int?): Int {
+    fun insertIntoEquipmentSlot(id: Int, weaponSlot: Int?, armorSlot: Int?): Int {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
         val root: Root<User> = criteriaUpdate.from(User::class.java)

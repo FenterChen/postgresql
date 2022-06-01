@@ -86,11 +86,10 @@ export default {
             localStorage.setItem("personallogin", JSON.stringify(res.data));
             router.push({ name: "Home" });
           })
-          .catch((e) => {
-            alert(e.response.data.message);
-            if (e.response.data.message == "帳號輸入錯誤，為方便測試直接建立帳號密碼") {
+          .catch(() => {
+            alert("帳號輸入錯誤，為方便測試直接建立帳號密碼");
               axios
-                .post(`${process.env.VUE_APP_URL}pi/register`, {
+                .post(`${process.env.VUE_APP_URL}api/register`, {
                   userId: user.id,
                   password: user.password,
                 })
@@ -98,7 +97,6 @@ export default {
                   localStorage.setItem("personallogin", JSON.stringify(res.data));
                   router.push({ name: "Home" });
                 });
-            }
           });
       }
     };

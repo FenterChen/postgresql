@@ -158,6 +158,8 @@ export default {
         roleimg.value = require("@/assets/warrior.png");
       } else if (user.value.role == "Ninja") {
         roleimg.value = require("@/assets/ninja.png");
+      }else{
+        roleimg.value = require("@/assets/defaultRole.png");
       }
     });
 
