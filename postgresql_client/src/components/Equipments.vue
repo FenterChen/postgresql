@@ -46,7 +46,7 @@
             <th scope="col" class="py-3 text-center">Id</th>
             <th scope="col" class="py-3 text-center">Type</th>
             <th scope="col" class="py-3 text-center">Ability</th>
-            <th scope="col" class="px-6 py-3 text-center">Equipments Name</th>
+            <th scope="col" class="px-6 py-3 text-center">Name</th>
             <th scope="col" class="px-6 py-3 text-center">Operate</th>
           </tr>
         </thead>
@@ -75,44 +75,45 @@
               </div>
             </td>
             <td
-              class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap box-border flex justify-between items-center border-l-2"
+              class="px-4 py-3 font-medium text-gray-900 dark:text-white box-border min-h-full border-l-2"
             >
-              {{ item.equipmentName }}
-
-              <button
-                @click="useEquipment(item)"
-                class="px-4 py-2 mx-4 font-bold bg-regal-blue text-white rounded-full"
-                v-if="
-                  item.equipmentId != user.weaponSlot.equipmentId &&
-                  item.equipmentId != user.armorSlot.equipmentId
-                "
-              >
-                Use
-              </button>
-              <button
-                @click="useEquipment(item)"
-                class="px-4 py-2 mx-4 font-bold bg-gray-400 text-white rounded-full cursor-not-allowed"
-                v-if="
-                  item.equipmentId == user.weaponSlot.equipmentId ||
-                  item.equipmentId == user.armorSlot.equipmentId
-                "
-              >
-                Used
-              </button>
+              <div class="w-14">{{ item.equipmentName }}</div>
             </td>
             <td class="px-4 py-2 text-center border-l-2">
-              <button
-                @click="editCheck(item)"
-                class="my-2 md:my-0 px-4 py-2 mx-2 font-bold bg-cyan text-white rounded-full"
-              >
-                Edit
-              </button>
-              <button
-                @click="deleteCheck(item.equipmentId)"
-                class="px-4 py-2 mx-2 font-bold bg-red-500 text-white rounded-full"
-              >
-                Delete
-              </button>
+              <div class="grid grid-cols-3">
+                <button
+                  @click="useEquipment(item)"
+                  class="px-4 py-2 mx-4 font-bold bg-regal-blue text-white rounded-full"
+                  v-if="
+                    item.equipmentId != user.weaponSlot.equipmentId &&
+                    item.equipmentId != user.armorSlot.equipmentId
+                  "
+                >
+                  Use
+                </button>
+                <button
+                  @click="useEquipment(item)"
+                  class="px-4 py-2 mx-4 font-bold bg-gray-400 text-white rounded-full cursor-not-allowed"
+                  v-if="
+                    item.equipmentId == user.weaponSlot.equipmentId ||
+                    item.equipmentId == user.armorSlot.equipmentId
+                  "
+                >
+                  Used
+                </button>
+                <button
+                  @click="editCheck(item)"
+                  class="my-2 md:my-0 px-4 py-2 mx-2 font-bold bg-cyan text-white rounded-full"
+                >
+                  Edit
+                </button>
+                <button
+                  @click="deleteCheck(item.equipmentId)"
+                  class="px-4 py-2 mx-2 font-bold bg-red-500 text-white rounded-full"
+                >
+                  Delete
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -158,7 +159,7 @@ export default {
         roleimg.value = require("@/assets/warrior.png");
       } else if (user.value.role == "Ninja") {
         roleimg.value = require("@/assets/ninja.png");
-      }else{
+      } else {
         roleimg.value = require("@/assets/defaultRole.png");
       }
     });
@@ -232,6 +233,7 @@ export default {
     };
 
     const Cancel = () => {
+      store.dispatch("refresh");
       showdelete.value = true;
       showdedit.value = true;
     };
