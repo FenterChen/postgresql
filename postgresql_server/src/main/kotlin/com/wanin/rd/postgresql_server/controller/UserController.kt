@@ -21,28 +21,28 @@ class UserController(private val userService: UserService) {
     //userId:String,password::String
     @PostMapping("/login")
     fun login(@RequestBody userLoginInput: UserLoginInput): UserIdDto {
-        return userService.getByUserIdAndPassword(userLoginInput.userId,userLoginInput.password)
+        return userService.getByUserIdAndPassword(userLoginInput.userId, userLoginInput.password)
     }
 
     //會員註冊
-    //userId:String,password::String
+    //userId: String,password: String
     @PostMapping("/register")
     fun register(@RequestBody register: User): UserIdDto {
         return userService.addUser(register)
     }
 
     //取會員資料
-    //userId:String
+    //userId: String
     @GetMapping("/{userId}")
     fun findUserByUserId(@PathVariable userId: String): UserDto {
         return userService.findUserByUserId(userId)
     }
 
     //更新會員資料
-    //id:Int,userName:String?,role:String?
+    //id: Int,userName: String?,role: String?
     @PutMapping()
     fun updateUserData(@RequestBody userInput: UserInput) {
-         userService.updateUserData(userInput.id, userInput.userName, userInput.role)
+        userService.updateUserData(userInput.id, userInput.userName, userInput.role)
     }
 
 }

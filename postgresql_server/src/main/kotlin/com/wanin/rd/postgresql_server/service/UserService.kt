@@ -19,9 +19,9 @@ class UserService(
     fun getUsers(): MutableList<User> =
         userRepository.findAll()
 
-    fun getByUserIdAndPassword( userId: String, password:String): UserIdDto {
+    fun getByUserIdAndPassword(userId: String, password: String): UserIdDto {
         try {
-            val result = userRepository.findAllByUserIdAndPassword(userId,password)
+            val result = userRepository.findAllByUserIdAndPassword(userId, password)
             return UserIdDto(result.userId)//僅傳回userId
         } catch (exception: EmptyResultDataAccessException) {
             throw ResponseStatusException(
@@ -41,7 +41,7 @@ class UserService(
 
     fun findUserByUserId(userId: String): UserDto {
         try {
-            val result= userRepository.findByUserId(userId)
+            val result = userRepository.findByUserId(userId)
             return result.convertToUserVo()
         } catch (exception: EmptyResultDataAccessException) {
             throw ResponseStatusException(
@@ -49,9 +49,9 @@ class UserService(
         }
     }
 
-    fun updateUserData(id:Int,userName:String?,role:String?): UserDto {
+    fun updateUserData(id: Int, userName: String?, role: String?): UserDto {
         try {
-            val result = userByEm.updateByUserId(id,userName,role)
+            val result = userByEm.updateByUserId(id, userName, role)
             return result.convertToUserVo()
         } catch (exception: NullPointerException) {
             throw ResponseStatusException(

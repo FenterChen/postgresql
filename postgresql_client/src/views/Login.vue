@@ -78,7 +78,7 @@ export default {
         }
       } else {
         axios
-          .post(`${process.env.VUE_APP_URL}api/login`, {
+          .post(`${process.env.VUE_APP_URL}user/login`, {
             userId: user.id,
             password: user.password,
           })
@@ -89,7 +89,7 @@ export default {
           .catch(() => {
             alert("帳號輸入錯誤，為方便測試直接建立帳號密碼");
               axios
-                .post(`${process.env.VUE_APP_URL}api/register`, {
+                .post(`${process.env.VUE_APP_URL}user/register`, {
                   userId: user.id,
                   password: user.password,
                 })

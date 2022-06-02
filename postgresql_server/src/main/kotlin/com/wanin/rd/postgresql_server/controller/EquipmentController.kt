@@ -14,26 +14,28 @@ class EquipmentController(
     private val equipmentService: EquipmentService,
 ) {
     //裝上裝備槽
-    //id:Int,weaponSlot:String?,armorSlot:String?
+    //id: Int,weaponSlot: String?,armorSlot: String?
     @PutMapping("/useEquipment")
     fun updateByEquipmentSlot(@RequestBody userInput: UserInput): ResponseEntity<Int> {
         return equipmentService.updateByEquipmentSlot(userInput)
     }
 
     //裝備名稱修改
-    //userId:String,equipmentId:Int,equipmentName:String?
+    //userId: String,equipmentId: Int,equipmentName: String?
     @PutMapping("/equipmentName")
     fun updateByWeaponOrArmorName(@RequestBody inputEquipmentName: EquipmentInput): ResponseEntity<Int> {
         return equipmentService.updateByWeaponOrArmorName(inputEquipmentName)
     }
 
     //刪除裝備
+    //equipmentId: Int
     @DeleteMapping("/{equipmentId}")
-    fun delByEquipmentId(@PathVariable equipmentId:Int): ResponseEntity<Int> {
+    fun delByEquipmentId(@PathVariable equipmentId: Int): ResponseEntity<Int> {
         return equipmentService.delByEquipmentId(equipmentId)
     }
 
     //鍛造裝備
+    // userId: Int,equipmentType: Int,equipmentName: String?
     @PostMapping("/forgingEquipment")
     fun addEquipment(@RequestBody userEquipment: UserEquipment): UserEquipment {
         return equipmentService.addEquipment(userEquipment)

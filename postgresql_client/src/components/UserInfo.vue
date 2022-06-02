@@ -70,7 +70,7 @@ export default {
     const rightOpen = ref(true);
     const save = () => {
       axios
-        .put(`${process.env.VUE_APP_URL}api/saver`, {
+        .put(`${process.env.VUE_APP_URL}user`, {
           id: user.value.id,
           userName: user.value.userName,
           role: user.value.role,

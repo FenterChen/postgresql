@@ -48,12 +48,12 @@ class EquipmentService(
 
     fun addEquipment(userEquipment: UserEquipment): UserEquipment {
 
-        val somecomputeValue: MutableList<EquipmentType>? =
+        val someComputeValue: MutableList<EquipmentType>? =
             equipmentByEm.findEquipmentType(userEquipment.equipmentType)
         val attribute = (1..50).random()//屬性值跑隨機
 
         //產生攻擊值或防禦值
-        val computeValue = checkNotNull(somecomputeValue)
+        val computeValue = checkNotNull(someComputeValue)
         when (computeValue[0].equipmentType) {
             "weapon" -> {
                 userEquipment.equipmentAtk = attribute * computeValue[0].equipmentBasicAtk!!//攻擊屬性

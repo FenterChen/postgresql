@@ -45,7 +45,6 @@ import UserInfo from "@/components/UserInfo";
 import Equipments from "@/components/Equipments";
 import Forge from "@/components/Forge";
 
-import axios from "axios";
 import store from "@/store";
 import { ref } from "vue";
 export default {
@@ -55,17 +54,7 @@ export default {
     Forge,
   },
   setup() {
-    const personal = JSON.parse(localStorage.getItem("personallogin"));
-    axios
-      .post(`${process.env.VUE_APP_URL}api/personal`, {
-        userId: personal.userId,
-      })
-      .then((res) => {
-        store.state.userContent = res.data;
-      })
-      .catch((e) => {
-        alert(e.response.data.message);
-      });
+    store.dispatch("refresh");
     const infoIsclick = ref(true);
     const equipIsclick = ref(false);
     const forgeIsclick = ref(false);
