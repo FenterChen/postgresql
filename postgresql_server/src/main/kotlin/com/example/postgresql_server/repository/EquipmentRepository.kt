@@ -36,7 +36,7 @@ class EquipmentByEm {
 
     //修改武器與裝備名稱
     @Transactional
-    fun updateEquipmentName(userId: Int, equipmentId: Int, equipmentName: String) {
+    fun updateEquipmentName(userId: Int, equipmentId: Int, equipmentName: String?): Int {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<UserEquipment> = cb.createCriteriaUpdate(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaUpdate.from(UserEquipment::class.java)
@@ -48,7 +48,7 @@ class EquipmentByEm {
 
         criteriaUpdate.set("equipmentName", equipmentName)//set value
 
-        em.createQuery(criteriaUpdate).executeUpdate()
+        return em.createQuery(criteriaUpdate).executeUpdate()
     }
 
     @Transactional

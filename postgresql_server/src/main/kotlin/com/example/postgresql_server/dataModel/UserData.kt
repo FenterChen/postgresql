@@ -27,7 +27,7 @@ data class User(
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "userId")
     @OrderBy("equipmentId")
-    val userEquipment: MutableList<UserEquipment>?,
+    val userEquipment: List<UserEquipment>?,
 )
 
 

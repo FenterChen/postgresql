@@ -3,70 +3,41 @@ package com.example.postgresql_server.controller
 import com.example.postgresql_server.dataModel.User
 import com.example.postgresql_server.dto.UserDto
 import com.example.postgresql_server.dto.UserIdDto
-import com.example.postgresql_server.dto.userConvertDto
 import com.example.postgresql_server.input.*
-import com.example.postgresql_server.repository.UserByEm
-import com.example.postgresql_server.repository.UserRepository
-import org.springframework.dao.EmptyResultDataAccessException
-import org.springframework.http.HttpStatus
+import com.example.postgresql_server.service.UserService
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
 @RequestMapping("/api")
-class UserController(
-    private val userRepository: UserRepository,
-    private val userByEm: UserByEm,
-) {
+class UserController(private val userService: UserService) {
     //取回所有會員
     @GetMapping
     fun allUsers(): MutableList<User> =
-        userRepository.findAll()
+        userService.getUsers()
 
     //會員登入
     @PostMapping("/login")
     fun login(@RequestBody userLogin: User): UserIdDto {
-        try {
-            val result = userRepository.findAllByUserIdAndPassword(userLogin.userId, userLogin.password)
-            return UserIdDto(result.userId)
-        } catch (exception: EmptyResultDataAccessException) {
-            throw exception
-        }
+        return userService.getByUserIdAndPassword(userLogin)
     }
 
     //會員註冊
     @PostMapping("/register")
     fun register(@RequestBody register: User): UserIdDto {
-        try {
-            userRepository.findByUserId(register.userId)
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
-        } catch (exception: EmptyResultDataAccessException) {
-            val result = userRepository.save(register)
-            return UserIdDto(result.userId)
-        }
+        return userService.addUser(register)
     }
 
     //取會員資料
     @PostMapping("/personal")
     fun personal(@RequestBody personal: UserIdDto): User {
-        try {
-            return userRepository.findByUserId(personal.userId)
-        } catch (exception: EmptyResultDataAccessException) {
-            throw exception
-        }
+        return userService.getUserData(personal)
     }
 
     //更新會員資料
     @PutMapping("/saver")
     fun saver(@RequestBody userInput: UserInput): UserDto {
-        try {
-            val res = userByEm.updateByUserId(userInput.id, userInput.userName, userInput.role)
-            return userConvertDto(res)
-        } catch (exception: NullPointerException) {
-            throw exception
-        }
-
+        return userService.updateUserData(userInput)
     }
 
 }

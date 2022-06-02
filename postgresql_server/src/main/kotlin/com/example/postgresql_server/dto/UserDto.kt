@@ -14,7 +14,7 @@ data class UserDto(
     var updatedAt: Instant,
     var weaponSlot: UserEquipment? = null,
     var armorSlot: UserEquipment? = null,
-    var userEquipment: MutableList<UserEquipment>?,
+    var userEquipment: List<UserEquipment>?,
 )
 
 fun userConvertDto(res: User): UserDto {
