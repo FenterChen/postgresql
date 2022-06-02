@@ -1,11 +1,9 @@
 package com.example.postgresql_server.dataModel
 
-
 import javax.persistence.*
 
-
 @Entity
-@Table(name = "user_equipment" ,schema = "daniel")
+@Table(name = "user_equipment", schema = "daniel")
 data class UserEquipment(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "equipment_id") var equipmentId: Int,

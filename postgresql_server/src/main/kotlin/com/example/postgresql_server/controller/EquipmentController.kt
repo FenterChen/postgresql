@@ -13,7 +13,6 @@ class EquipmentController(
     private val equipmentService: EquipmentService,
 ) {
 
-
     //裝上裝備槽
     @PutMapping("/useEquipment")
     fun useEquipment(@RequestBody userInput: UserInput): ResponseEntity<Int> {

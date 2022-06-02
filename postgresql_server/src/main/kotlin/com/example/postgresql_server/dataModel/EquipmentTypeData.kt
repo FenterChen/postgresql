@@ -2,7 +2,6 @@ package com.example.postgresql_server.dataModel
 
 import javax.persistence.*
 
-
 @Entity
 @Table(name = "equipment_type" ,schema = "daniel")
 data class EquipmentType(

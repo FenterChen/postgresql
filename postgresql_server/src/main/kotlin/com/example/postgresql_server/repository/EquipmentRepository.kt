@@ -11,7 +11,6 @@ import javax.persistence.TypedQuery
 import javax.persistence.criteria.*
 import javax.transaction.Transactional
 
-
 @Repository
 interface EquipmentRepository : JpaRepository<UserEquipment, Int>
 
@@ -69,7 +68,7 @@ class EquipmentByEm {
 
     //裝上裝備槽
     @Transactional
-    fun insertIntoEquipmentSlot(id: Int, weaponSlot: Int?, armorSlot: Int?): Int {
+    fun updateEquipmentSlot(id: Int, weaponSlot: Int?, armorSlot: Int?): Int {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
         val root: Root<User> = criteriaUpdate.from(User::class.java)

@@ -1,10 +1,8 @@
 package com.example.postgresql_server.dataModel
 
-
 import java.time.Instant
 import java.time.Instant.now
 import javax.persistence.*
-
 
 @Entity
 @Table(name = "game_user", schema = "daniel")

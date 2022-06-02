@@ -8,7 +8,6 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
 
-
 @Repository
 interface UserRepository : JpaRepository<User, Int> {
     fun findAllByUserIdAndPassword(userId: String, password: String): User

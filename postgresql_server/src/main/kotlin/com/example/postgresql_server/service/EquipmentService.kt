@@ -6,9 +6,6 @@ import com.example.postgresql_server.input.EquipmentInput
 import com.example.postgresql_server.input.UserInput
 import com.example.postgresql_server.repository.EquipmentByEm
 import com.example.postgresql_server.repository.EquipmentRepository
-import com.example.postgresql_server.repository.UserByEm
-import com.example.postgresql_server.repository.UserRepository
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -20,7 +17,7 @@ class EquipmentService(
     private val equipmentRepository: EquipmentRepository,
 ) {
     fun updateUserEquipment(userInput: UserInput): ResponseEntity<Int> {
-        val result = equipmentByEm.insertIntoEquipmentSlot(userInput.id, userInput.weaponSlot, userInput.armorSlot)
+        val result = equipmentByEm.updateEquipmentSlot(userInput.id, userInput.weaponSlot, userInput.armorSlot)
         if (result != 0) {
             return ResponseEntity.ok().body(result)
         } else {
@@ -48,7 +45,7 @@ class EquipmentService(
         }
     }
 
-    fun addEquipment(userEquipment: UserEquipment): UserEquipment{
+    fun addEquipment(userEquipment: UserEquipment): UserEquipment {
         val computeValue: MutableList<EquipmentType>? =
             equipmentByEm.findEquipmentType(userEquipment.equipmentType)
         val attribute = (1..50).random()//屬性值跑隨機
