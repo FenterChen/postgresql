@@ -1,8 +1,8 @@
-package com.example.postgresql_server.repository
+package com.wanin.rd.postgresql_server.repository
 
-import com.example.postgresql_server.dataModel.EquipmentType
-import com.example.postgresql_server.dataModel.User
-import com.example.postgresql_server.dataModel.UserEquipment
+import com.wanin.rd.postgresql_server.dataModel.EquipmentType
+import com.wanin.rd.postgresql_server.dataModel.User
+import com.wanin.rd.postgresql_server.dataModel.UserEquipment
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import javax.persistence.EntityManager
@@ -35,15 +35,14 @@ class EquipmentByEm {
 
     //修改武器與裝備名稱
     @Transactional
-    fun updateEquipmentName(userId: Int, equipmentId: Int, equipmentName: String?): Int {
+    fun updateEquipmentName(equipmentId: Int, equipmentName: String?): Int {
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<UserEquipment> = cb.createCriteriaUpdate(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaUpdate.from(UserEquipment::class.java)
 
         criteriaUpdate.where(
-            cb.equal(root.get<Int>("userId"), userId),
             cb.equal(root.get<Int>("equipmentId"), equipmentId),
-        )//where userId :userId && equipmentId :equipmentId
+        )//where equipmentId :equipmentId
 
         criteriaUpdate.set("equipmentName", equipmentName)//set value
 
@@ -52,13 +51,12 @@ class EquipmentByEm {
 
     @Transactional
     //刪除裝備
-    fun delEquipment(userId: Int, equipmentId: Int): Int {
+    fun delEquipment(equipmentId: Int): Int {
         val cb = em.criteriaBuilder
         val criteriaDelete: CriteriaDelete<UserEquipment> = cb.createCriteriaDelete(UserEquipment::class.java)
         val root: Root<UserEquipment> = criteriaDelete.from(UserEquipment::class.java)
 
         criteriaDelete.where(
-            cb.equal(root.get<Int>("userId"), userId),
             cb.equal(root.get<Int>("equipmentId"), equipmentId),
         )//where userId :userId && equipmentId :equipmentId
 

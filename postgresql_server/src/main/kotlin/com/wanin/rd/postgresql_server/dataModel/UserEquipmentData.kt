@@ -1,4 +1,4 @@
-package com.example.postgresql_server.dataModel
+package com.wanin.rd.postgresql_server.dataModel
 
 import javax.persistence.*
 

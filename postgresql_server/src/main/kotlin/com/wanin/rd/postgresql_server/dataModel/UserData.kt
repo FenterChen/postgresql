@@ -1,5 +1,6 @@
-package com.example.postgresql_server.dataModel
+package com.wanin.rd.postgresql_server.dataModel
 
+import com.wanin.rd.postgresql_server.dto.UserDto
 import java.time.Instant
 import java.time.Instant.now
 import javax.persistence.*
@@ -26,6 +27,18 @@ data class User(
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, mappedBy = "userId")
     @OrderBy("equipmentId")
     val userEquipment: List<UserEquipment>?,
-)
+) {
+    fun convertToUserVo() = UserDto(
+        id = this.id,
+        userId = this.userId,
+        userName = this.userName,
+        role = this.role,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
+        weaponSlot = this.weaponSlot,
+        armorSlot = this.armorSlot,
+        userEquipment = this.userEquipment,
+    )
+}
 
 

@@ -1,6 +1,6 @@
-package com.example.postgresql_server.repository
+package com.wanin.rd.postgresql_server.repository
 
-import com.example.postgresql_server.dataModel.User
+import com.wanin.rd.postgresql_server.dataModel.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.time.Instant

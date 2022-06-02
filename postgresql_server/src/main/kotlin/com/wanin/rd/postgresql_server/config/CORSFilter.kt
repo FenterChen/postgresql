@@ -1,4 +1,4 @@
-package com.example.postgresql_server.config
+package com.wanin.rd.postgresql_server.config
 
 import org.springframework.web.filter.GenericFilterBean
 import java.io.IOException

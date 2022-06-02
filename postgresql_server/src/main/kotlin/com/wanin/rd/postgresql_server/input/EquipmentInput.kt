@@ -1,4 +1,4 @@
-package com.example.postgresql_server.input
+package com.wanin.rd.postgresql_server.input
 
 data class EquipmentInput(
     val userId: Int,

@@ -1,4 +1,4 @@
-package com.example.postgresql_server
+package com.wanin.rd.postgresql_server
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
