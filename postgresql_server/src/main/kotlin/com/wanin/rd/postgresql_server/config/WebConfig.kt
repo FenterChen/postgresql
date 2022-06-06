@@ -15,3 +15,4 @@ class WebConfig() {
         return registration
     }
 }
+

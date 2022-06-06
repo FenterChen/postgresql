@@ -26,6 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.exposed:exposed-java-time:0.38.2")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.flywaydb:flyway-core:8.5.12")
     runtimeOnly("org.postgresql:postgresql")
 }
 
@@ -40,23 +41,23 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-flyway {
-    url = "jdbc:postgresql://35.189.161.175:5432/hasura2"
-    user = "postgres"
-    password = "postgrespassword"
-    schemas = arrayOf("daniel")
-    baselineOnMigrate = true//已有資料庫的狀態下
-
-//  batch = true//購買Teams才可用
-//  stream = true//購買Teams才可用
-
-//	資料夾路徑default結構
-//	locations = arrayOf("classpath:db/migration")
-//	sqlMigrationPrefix = "V"
-//	sqlMigrationSeparator = "__"
-//	sqlMigrationSuffixes = arrayOf(".sql")
-
-}
+//flyway {
+//    url = "jdbc:postgresql://35.189.161.175:5432/hasura2"
+//    user = "postgres"
+//    password = "postgrespassword"
+//    schemas = arrayOf("daniel")
+//    baselineOnMigrate = true//已有資料庫的狀態下
+//
+////  batch = true//購買Teams才可用
+////  stream = true//購買Teams才可用
+//
+////	資料夾路徑default結構
+////	locations = arrayOf("classpath:db/migration")
+////	sqlMigrationPrefix = "V"
+////	sqlMigrationSeparator = "__"
+////	sqlMigrationSuffixes = arrayOf(".sql")
+//
+//}
 
 //docker {
 //	springBootApplication {

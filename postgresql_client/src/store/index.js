@@ -18,9 +18,8 @@ export default createStore({
   actions: {
     refresh(context){
       const personal = JSON.parse(localStorage.getItem("personallogin"));
-      let userId= personal.userId;
       axios
-      .get(`${process.env.VUE_APP_URL}user/${userId}`)
+      .get(`${process.env.VUE_APP_URL}user/${personal.userId}`)
       .then((res) => {
         context.commit('MuUserContent',res)
       })

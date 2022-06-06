@@ -206,12 +206,9 @@ export default {
     };
 
     const deleteConfirm = () => {
-      // axios.post("http://localhost:5050/equipment/delEquipment",{建置後
+      const equipmentId= deleteId.value;
       axios
-        .post(`${process.env.VUE_APP_URL}equipment/delEquipment`, {
-          userId: user.value.id,
-          equipmentId: deleteId.value,
-        })
+        .delete(`${process.env.VUE_APP_URL}equipment/${equipmentId}`)
         .then((res) => {
           if (res.data == 1) {
             store.dispatch("refresh");

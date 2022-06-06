@@ -58,7 +58,7 @@ class EquipmentByEm {
 
         criteriaDelete.where(
             cb.equal(root.get<Int>("equipmentId"), equipmentId),
-        )//where userId :userId && equipmentId :equipmentId
+        )// equipmentId :equipmentId
 
 
         return em.createQuery(criteriaDelete).executeUpdate()
@@ -73,7 +73,7 @@ class EquipmentByEm {
 
         criteriaUpdate.where(
             cb.equal(root.get<Int>("id"), id),
-        )//where userId :userId && equipmentId :equipmentId
+        )//where userId :userId
 
         criteriaUpdate.set("weaponSlot", weaponSlot)//set value
         criteriaUpdate.set("armorSlot", armorSlot)//set value
