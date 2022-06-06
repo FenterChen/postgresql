@@ -26,7 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.exposed:exposed-java-time:0.38.2")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.flywaydb:flyway-core:8.5.12")
+    implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
 }
 
