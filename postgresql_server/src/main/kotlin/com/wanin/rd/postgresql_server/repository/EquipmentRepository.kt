@@ -20,15 +20,32 @@ class EquipmentByEm {
     @PersistenceContext
     private lateinit var em: EntityManager
 
+    //裝上裝備槽
+    @Transactional
+    fun updateEquipmentSlot(id: Int, weaponSlot: Int?, armorSlot: Int?): Int {
+        val cb = em.criteriaBuilder
+        val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
+        val root: Root<User> = criteriaUpdate.from(User::class.java)
+
+        criteriaUpdate.where(
+            cb.equal(root.get<Int>("id"), id),
+        )//where userId :userId
+
+        criteriaUpdate.set("weaponSlot", weaponSlot)//set value
+        criteriaUpdate.set("armorSlot", armorSlot)//set value
+
+        return em.createQuery(criteriaUpdate).executeUpdate()
+    }
+
     //查詢裝備表並取初始值
     fun findEquipmentType(id: Int): MutableList<EquipmentType>? {
         val cb = em.criteriaBuilder
         val cq: CriteriaQuery<EquipmentType> = cb.createQuery(EquipmentType::class.java) // select UserEquipment
         val root: Root<EquipmentType> = cq.from(EquipmentType::class.java) // from UserEquipment
 
-        val id: Predicate = cb.equal(root.get<Int>("id"), id)
+        val userid: Predicate = cb.equal(root.get<Int>("id"), id)
 
-        cq.where(id) // where id = :id
+        cq.where(userid) // where id = :id
         val tq: TypedQuery<EquipmentType> = em.createQuery(cq)
         return tq.resultList
     }
@@ -64,22 +81,6 @@ class EquipmentByEm {
         return em.createQuery(criteriaDelete).executeUpdate()
     }
 
-    //裝上裝備槽
-    @Transactional
-    fun updateEquipmentSlot(id: Int, weaponSlot: Int?, armorSlot: Int?): Int {
-        val cb = em.criteriaBuilder
-        val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)
-        val root: Root<User> = criteriaUpdate.from(User::class.java)
-
-        criteriaUpdate.where(
-            cb.equal(root.get<Int>("id"), id),
-        )//where userId :userId
-
-        criteriaUpdate.set("weaponSlot", weaponSlot)//set value
-        criteriaUpdate.set("armorSlot", armorSlot)//set value
-
-        return em.createQuery(criteriaUpdate).executeUpdate()
-    }
 }
 
 

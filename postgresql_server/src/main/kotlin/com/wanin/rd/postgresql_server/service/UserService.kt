@@ -8,6 +8,7 @@ import com.wanin.rd.postgresql_server.repository.UserByEm
 import com.wanin.rd.postgresql_server.repository.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
@@ -20,19 +21,14 @@ class UserService(
         userRepository.findAll()
 
     fun getByUserIdAndPassword(userId: String, password: String): UserIdDto {
-        try {
-            val result = userRepository.findAllByUserIdAndPassword(userId, password)
-            return UserIdDto(result.userId)//僅傳回userId
-        } catch (exception: EmptyResultDataAccessException) {
-            throw ResponseStatusException(
-                HttpStatus.BAD_REQUEST, exception.message)
-        }
+        val result = userRepository.findAllByUserIdAndPassword(userId, password)
+        return UserIdDto(result.userId)//僅傳回userId
     }
 
     fun addUser(register: User): UserIdDto {
         try {
             userRepository.findByUserId(register.userId)
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "已有此帳號")
         } catch (exception: EmptyResultDataAccessException) {
             val result = userRepository.save(register)
             return UserIdDto(result.userId)//僅傳回userId
@@ -40,23 +36,12 @@ class UserService(
     }
 
     fun findUserByUserId(userId: String): UserDto {
-        try {
-            val result = userRepository.findByUserId(userId)
-            return result.convertToUserVo()
-        } catch (exception: EmptyResultDataAccessException) {
-            throw ResponseStatusException(
-                HttpStatus.BAD_REQUEST, exception.message)
-        }
+        val result = userRepository.findByUserId(userId)
+        return result.convertToUserVo()
     }
 
-    fun updateUserData(id: Int, userName: String?, role: String?): UserDto {
-        try {
-            val result = userByEm.updateByUserId(id, userName, role)
-            return result.convertToUserVo()
-        } catch (exception: NullPointerException) {
-            throw ResponseStatusException(
-                HttpStatus.BAD_REQUEST, exception.message)
-        }
+    fun updateUserData(id: Int, userName: String?, role: String?) {
+        userByEm.updateByUserId(id, userName, role)
     }
 
 }

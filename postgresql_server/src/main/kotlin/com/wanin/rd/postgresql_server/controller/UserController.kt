@@ -6,7 +6,9 @@ import com.wanin.rd.postgresql_server.dto.UserIdDto
 import com.wanin.rd.postgresql_server.input.UserInput
 import com.wanin.rd.postgresql_server.input.UserLoginInput
 import com.wanin.rd.postgresql_server.service.UserService
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 
 @RestController
@@ -21,7 +23,12 @@ class UserController(private val userService: UserService) {
     //userId:String,password::String
     @PostMapping("/login")
     fun login(@RequestBody userLoginInput: UserLoginInput): UserIdDto {
-        return userService.getByUserIdAndPassword(userLoginInput.userId, userLoginInput.password)
+        try {
+            return userService.getByUserIdAndPassword(userLoginInput.userId, userLoginInput.password)
+        } catch (exception: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, exception.message)
+        }
     }
 
     //會員註冊
@@ -35,15 +42,24 @@ class UserController(private val userService: UserService) {
     //userId: String
     @GetMapping("/{userId}")
     fun findUserByUserId(@PathVariable userId: String): UserDto {
-        return userService.findUserByUserId(userId)
+        try {
+            return userService.findUserByUserId(userId)
+        } catch (exception: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST, exception.message)
+        }
     }
 
     //更新會員資料
     //id: Int,userName: String?,role: String?
     @PutMapping()
-    fun updateUserData(@RequestBody userInput: UserInput) {
-        userService.updateUserData(userInput.id, userInput.userName, userInput.role)
-    }
+    fun updateUserData(@RequestBody userInput: UserInput) =
+        try {
+            userService.updateUserData(userInput.id, userInput.userName, userInput.role)
+        } catch (exception: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, exception.message)
+        }
 
 }
 

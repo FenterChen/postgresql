@@ -25,7 +25,7 @@ class UserByEm {
         val user: User = em.find(User::class.java, id)
         user.role = role
         user.userName = userName
-        user.updatedAt = Instant.now()
+//        user.updatedAt = Instant.now()
         return em.merge(user)
     }
 

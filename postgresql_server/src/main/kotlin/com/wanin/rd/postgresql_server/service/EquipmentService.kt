@@ -18,32 +18,28 @@ class EquipmentService(
 ) {
     fun updateByEquipmentSlot(userInput: UserInput): ResponseEntity<Int> {
         val result = equipmentByEm.updateEquipmentSlot(userInput.id, userInput.weaponSlot, userInput.armorSlot)
-        if (result != 0) {
-            return ResponseEntity.ok().body(result)
-        } else {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        if (result == 0) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
         }
-
+        return ResponseEntity.ok().body(result)
     }
 
     fun updateByWeaponOrArmorName(inputEquipmentName: EquipmentInput): ResponseEntity<Int> {
         val result = equipmentByEm.updateEquipmentName(
             inputEquipmentName.equipmentId,
             inputEquipmentName.equipmentName)
-        if (result != 0) {
-            return ResponseEntity.ok().body(result)
-        } else {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        if (result == 0) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
         }
+        return ResponseEntity.ok().body(result)
     }
 
     fun delByEquipmentId(equipmentId: Int): ResponseEntity<Int> {
         val result = equipmentByEm.delEquipment(equipmentId)
-        if (result != 0) {
-            return ResponseEntity.ok().body(result)
-        } else {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        if (result == 0) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
         }
+        return ResponseEntity.ok().body(result)
     }
 
     fun addEquipment(userEquipment: UserEquipment): UserEquipment {
@@ -62,7 +58,7 @@ class EquipmentService(
                 userEquipment.equipmentDef = attribute * computeValue[0].equipmentBasicDef!!//防禦屬性
             }
             else -> {
-                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "鍛造錯誤")
+                throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
 
@@ -72,4 +68,3 @@ class EquipmentService(
     }
 
 }
-

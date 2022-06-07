@@ -5,8 +5,10 @@ import com.wanin.rd.postgresql_server.dataModel.UserEquipment
 import com.wanin.rd.postgresql_server.service.EquipmentService
 import com.wanin.rd.postgresql_server.input.EquipmentInput
 import com.wanin.rd.postgresql_server.input.UserInput
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/equipment")
@@ -17,28 +19,48 @@ class EquipmentController(
     //id: Int,weaponSlot: String?,armorSlot: String?
     @PutMapping("/useEquipment")
     fun updateByEquipmentSlot(@RequestBody userInput: UserInput): ResponseEntity<Int> {
-        return equipmentService.updateByEquipmentSlot(userInput)
+        try {
+            return equipmentService.updateByEquipmentSlot(userInput)
+        } catch (exception: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, exception.message)
+        }
     }
 
     //裝備名稱修改
     //userId: String,equipmentId: Int,equipmentName: String?
     @PutMapping("/equipmentName")
     fun updateByWeaponOrArmorName(@RequestBody inputEquipmentName: EquipmentInput): ResponseEntity<Int> {
-        return equipmentService.updateByWeaponOrArmorName(inputEquipmentName)
+        try {
+            return equipmentService.updateByWeaponOrArmorName(inputEquipmentName)
+        } catch (exception: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, exception.message)
+        }
     }
 
     //刪除裝備
     //equipmentId: Int
     @DeleteMapping("/{equipmentId}")
     fun delByEquipmentId(@PathVariable equipmentId: Int): ResponseEntity<Int> {
-        return equipmentService.delByEquipmentId(equipmentId)
+        try {
+            return equipmentService.delByEquipmentId(equipmentId)
+        } catch (exception: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, exception.message)
+        }
     }
 
     //鍛造裝備
     // userId: Int,equipmentType: Int,equipmentName: String?
     @PostMapping("/forgingEquipment")
     fun addEquipment(@RequestBody userEquipment: UserEquipment): UserEquipment {
-        return equipmentService.addEquipment(userEquipment)
+        try {
+            return equipmentService.addEquipment(userEquipment)
+        } catch (exception: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR, exception.message)
+        }
     }
 
 }

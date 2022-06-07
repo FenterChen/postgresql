@@ -6,7 +6,6 @@ plugins {
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
     kotlin("plugin.jpa") version "1.3.72"
-    id("org.flywaydb.flyway") version "8.5.12"
 //	id("com.bmuschko.docker-spring-boot-application") version "6.7.0"
 }
 
