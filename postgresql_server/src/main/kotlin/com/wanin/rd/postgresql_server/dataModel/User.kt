@@ -10,9 +10,9 @@ import javax.persistence.*
 data class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Int,
     @Column(name = "user_id") var userId: String,
-    @Column(name = "user_name") var userName: String?,
+    @Column(name = "user_name") var userName: String? = null,
     @Column var password: String,
-    @Column var role: String?,
+    @Column var role: String? = null,
     @Column(name = "created_at") val createdAt: Instant = now(),
     @Column(name = "updated_at") var updatedAt: Instant = now(),
 

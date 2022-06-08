@@ -2,7 +2,8 @@ version: '3.4'
 
 services:
   clientapp:
-    image: clientapp
+    image: postgresqlclient
+    restart: always
     build:
       context: postgresql_client
       dockerfile: ./Dockerfile
@@ -12,6 +13,7 @@ services:
       - 3030:8080
   server:
     image: postgresqlserver
+    restart: always
     build:
       context: postgresql_server
       dockerfile: ./Dockerfile
