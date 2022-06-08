@@ -3,7 +3,6 @@ package com.wanin.rd.postgresql_server.repository
 import com.wanin.rd.postgresql_server.dataModel.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import java.time.Instant
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.transaction.Transactional

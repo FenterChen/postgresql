@@ -3,12 +3,10 @@ package com.wanin.rd.postgresql_server.service
 import com.wanin.rd.postgresql_server.dataModel.User
 import com.wanin.rd.postgresql_server.dto.UserDto
 import com.wanin.rd.postgresql_server.dto.UserIdDto
-import com.wanin.rd.postgresql_server.input.UserInput
 import com.wanin.rd.postgresql_server.repository.UserByEm
 import com.wanin.rd.postgresql_server.repository.UserRepository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 

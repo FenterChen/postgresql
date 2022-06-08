@@ -31,7 +31,7 @@ class UserController(private val userService: UserService) {
         }
     }
 
-    //會員註冊
+    //會員註冊//為方便測試 無此帳號會直接註冊
     //userId: String,password: String
     @PostMapping("/register")
     fun register(@RequestBody register: User): UserIdDto {

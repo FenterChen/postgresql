@@ -1,4 +1,9 @@
 server:
+  port: 8080
+  ssl:
+    key-store: classpath:danielKey.p12
+    key-store-password: danielKeyStorepass
+    keyStoreType: PKCS12
   error:
     include-message: always
     include-binding-errors: always
