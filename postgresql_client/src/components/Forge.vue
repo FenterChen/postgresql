@@ -100,7 +100,7 @@ export default {
       }
       setTimeout(() => {
         axios
-          .post(`${process.env.VUE_APP_URL}equipment/forgingEquipment`, {
+          .post(`${process.env.VUE_APP_URL}equipment/addEquipment`, {
             userId: newEquip.userid,
             equipmentType: newEquip.type,
             equipmentName: name,

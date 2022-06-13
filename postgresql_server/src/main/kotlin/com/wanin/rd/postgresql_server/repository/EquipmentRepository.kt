@@ -80,7 +80,6 @@ class EquipmentByEm {
 
         return em.createQuery(criteriaDelete).executeUpdate()
     }
-
 }
 
 

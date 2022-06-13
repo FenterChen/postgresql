@@ -2,8 +2,10 @@ package com.wanin.rd.postgresql_server.service
 
 import com.wanin.rd.postgresql_server.dataModel.EquipmentType
 import com.wanin.rd.postgresql_server.dataModel.UserEquipment
-import com.wanin.rd.postgresql_server.input.EquipmentInput
-import com.wanin.rd.postgresql_server.input.UserInput
+import com.wanin.rd.postgresql_server.dto.EquipmentAbilityDto
+import com.wanin.rd.postgresql_server.input.EquipmentNameInput
+import com.wanin.rd.postgresql_server.input.NewEquipmentInput
+import com.wanin.rd.postgresql_server.input.UserSlotInput
 import com.wanin.rd.postgresql_server.repository.EquipmentByEm
 import com.wanin.rd.postgresql_server.repository.EquipmentRepository
 import org.springframework.http.HttpStatus
@@ -16,15 +18,16 @@ class EquipmentService(
     private val equipmentByEm: EquipmentByEm,
     private val equipmentRepository: EquipmentRepository,
 ) {
-    fun updateByEquipmentSlot(userInput: UserInput): ResponseEntity<Int> {
-        val result = equipmentByEm.updateEquipmentSlot(userInput.id, userInput.weaponSlot, userInput.armorSlot)
+    fun updateByEquipmentSlot(userSlotInput: UserSlotInput): ResponseEntity<Int> {
+        val result =
+            equipmentByEm.updateEquipmentSlot(userSlotInput.id, userSlotInput.weaponSlot, userSlotInput.armorSlot)
         if (result == 0) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
         }
         return ResponseEntity.ok().body(result)
     }
 
-    fun updateByWeaponOrArmorName(inputEquipmentName: EquipmentInput): ResponseEntity<Int> {
+    fun updateByWeaponOrArmorName(inputEquipmentName: EquipmentNameInput): ResponseEntity<Int> {
         val result = equipmentByEm.updateEquipmentName(
             inputEquipmentName.equipmentId,
             inputEquipmentName.equipmentName)
@@ -42,29 +45,31 @@ class EquipmentService(
         return ResponseEntity.ok().body(result)
     }
 
-    fun addEquipment(userEquipment: UserEquipment): UserEquipment {
-
+    fun addEquipment(newEquipmentInput: NewEquipmentInput): UserEquipment {
         val someComputeValue: MutableList<EquipmentType>? =
-            equipmentByEm.findEquipmentType(userEquipment.equipmentType)
+            equipmentByEm.findEquipmentType(newEquipmentInput.equipmentType)
         val attribute = (1..50).random()//屬性值跑隨機
-
         //產生攻擊值或防禦值
         val computeValue = checkNotNull(someComputeValue)
+
         when (computeValue[0].equipmentType) {
             "weapon" -> {
-                userEquipment.equipmentAtk = attribute * computeValue[0].equipmentBasicAtk!!//攻擊屬性
+                EquipmentAbilityDto.equipmentAtk = attribute * computeValue[0].equipmentBasicAtk!!//攻擊屬性
             }
             "armor" -> {
-                userEquipment.equipmentDef = attribute * computeValue[0].equipmentBasicDef!!//防禦屬性
+                EquipmentAbilityDto.equipmentDef = attribute * computeValue[0].equipmentBasicDef!!//防禦屬性
             }
             else -> {
                 throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
-
-        //存入裝備名稱、寫入資料庫並傳回前端
-        userEquipment.equipmentName = userEquipment.equipmentName//裝備名稱
-        return equipmentRepository.save(userEquipment)
+        return equipmentRepository.save(UserEquipment(null,
+            newEquipmentInput.userId,
+            newEquipmentInput.equipmentName,
+            newEquipmentInput.equipmentType,
+            EquipmentAbilityDto.equipmentAtk,
+            EquipmentAbilityDto.equipmentDef)
+        )
     }
 
 }

@@ -1,7 +1,7 @@
 package com.wanin.rd.postgresql_server.input
 
-data class EquipmentInput(
+class NewEquipmentInput (
     val userId: Int,
-    val equipmentId: Int,
     val equipmentName: String?,
+    var equipmentType: Int,
 )
