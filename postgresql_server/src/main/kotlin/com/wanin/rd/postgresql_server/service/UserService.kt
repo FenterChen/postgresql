@@ -38,8 +38,8 @@ class UserService(
         return result.convertToUserVo()
     }
 
-    fun updateUserData(id: Int, userName: String?, role: String?) {
-        userByEm.updateByUserId(id, userName, role)
+    fun updateUserData(id: Int, userName: String?, role: String?): Int {
+       return userByEm.updateByUserId(id, userName, role)
     }
 
 }

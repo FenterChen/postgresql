@@ -7,10 +7,15 @@ import com.wanin.rd.postgresql_server.input.UserInfoInput
 import com.wanin.rd.postgresql_server.input.UserLoginInput
 import com.wanin.rd.postgresql_server.service.UserService
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import springfox.documentation.annotations.ApiIgnore
+import java.awt.print.Book
+
 
 //https://localhost:8080/swagger-ui/index.html
 @Api(tags = ["UserController"], description = "會員")
@@ -24,9 +29,8 @@ class UserController(private val userService: UserService) {
         userService.getUsers()
 
     @ApiOperation("會員登入")
-    //userId:String,password::String
-    @PostMapping("/login")
-    fun login(@RequestBody userLoginInput: UserLoginInput): UserIdDto {
+    @PostMapping("/login")//userId:String,password:String
+    fun login(@ApiParam(required = true, value = "會員登入所需參數") @RequestBody userLoginInput: UserLoginInput): UserIdDto {
         try {
             return userService.getByUserIdAndPassword(userLoginInput.userId, userLoginInput.password)
         } catch (exception: Exception) {
@@ -36,15 +40,20 @@ class UserController(private val userService: UserService) {
     }
 
     @ApiOperation("會員註冊(為方便測試，會員登入時，無此帳號會直接註冊)")
-    //userId: String,password: String
-    @PostMapping("/register")
+    @ApiIgnore
+    @PostMapping("/register")//userId: String,password: String
     fun register(@RequestBody register: User): UserIdDto {
         return userService.addUser(register)
     }
 
     @ApiOperation("取會員資料")
-    //userId: String
-    @GetMapping("/{userId}")
+    @ApiImplicitParam(name = "userId",
+        value = "會員帳號",
+        required = true,
+        paramType = "path",
+        example = "test"
+    )
+    @GetMapping("/{userId}")//userId:String
     fun findUserByUserId(@PathVariable userId: String): UserDto {
         try {
             return userService.findUserByUserId(userId)
@@ -55,9 +64,8 @@ class UserController(private val userService: UserService) {
     }
 
     @ApiOperation("更新會員資料")
-    //id: Int,userName: String?,role: String?
     @PutMapping()
-    fun updateUserData(@RequestBody userInfoInput: UserInfoInput) =
+    fun updateUserData(@ApiParam(value = "更新會員資料所需參數") @RequestBody userInfoInput: UserInfoInput) =
         try {
             userService.updateUserData(userInfoInput.id, userInfoInput.userName, userInfoInput.role)
         } catch (exception: Exception) {

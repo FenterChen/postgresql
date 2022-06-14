@@ -7,7 +7,9 @@ import com.wanin.rd.postgresql_server.input.EquipmentNameInput
 import com.wanin.rd.postgresql_server.input.NewEquipmentInput
 import com.wanin.rd.postgresql_server.input.UserSlotInput
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -21,9 +23,10 @@ class EquipmentController(
     private val equipmentService: EquipmentService,
 ) {
     @ApiOperation("裝上裝備槽")
-    //id: Int,weaponSlot: String?,armorSlot: String?
-    @PutMapping("/useEquipment")
-    fun updateByEquipmentSlot(@RequestBody userSlotInput: UserSlotInput): ResponseEntity<Int> {
+    @PutMapping("/useEquipment")//id: Int,weaponSlot: String?,armorSlot: String?
+    fun updateByEquipmentSlot(
+        @ApiParam(value = "裝上裝備槽所需參數") @RequestBody userSlotInput: UserSlotInput,
+    ): ResponseEntity<Int> {
         try {
             return equipmentService.updateByEquipmentSlot(userSlotInput)
         } catch (exception: Exception) {
@@ -33,9 +36,10 @@ class EquipmentController(
     }
 
     @ApiOperation("裝備名稱修改")
-    //userId: String,equipmentId: Int,equipmentName: String?
-    @PutMapping("/equipmentName")
-    fun updateByWeaponOrArmorName(@RequestBody inputEquipmentName: EquipmentNameInput): ResponseEntity<Int> {
+    @PutMapping("/equipmentName")//userId: String,equipmentId: Int,equipmentName: String?
+    fun updateByWeaponOrArmorName(
+        @ApiParam(value = "裝備名稱修改所需參數") @RequestBody inputEquipmentName: EquipmentNameInput,
+    ): ResponseEntity<Int> {
         try {
             return equipmentService.updateByWeaponOrArmorName(inputEquipmentName)
         } catch (exception: Exception) {
@@ -45,9 +49,14 @@ class EquipmentController(
     }
 
     @ApiOperation("刪除裝備")
-    //equipmentId: Int
-    @DeleteMapping("/{equipmentId}")
-    fun delByEquipmentId(@PathVariable equipmentId: Int): ResponseEntity<Int> {
+    @ApiImplicitParam(name = "equipmentId",
+        value = "裝備Id",
+        required = true,
+        paramType = "path",
+        example = "1"
+    )
+    @DeleteMapping("/{equipmentId}")//equipmentId: Int
+    fun delByEquipmentId(@ApiParam(value = "刪除裝備所需參數") @PathVariable equipmentId: Int): ResponseEntity<Int> {
         try {
             return equipmentService.delByEquipmentId(equipmentId)
         } catch (exception: Exception) {
@@ -57,9 +66,8 @@ class EquipmentController(
     }
 
     @ApiOperation("鍛造裝備")
-    // userId: Int,equipmentType: Int,equipmentName: String?
-    @PostMapping("/addEquipment")
-    fun addEquipment(@RequestBody newEquipmentInput: NewEquipmentInput): UserEquipment {
+    @PostMapping("/addEquipment")// userId: Int,equipmentType: Int,equipmentName: String?
+    fun addEquipment(@ApiParam(value = "鍛造裝備所需參數") @RequestBody newEquipmentInput: NewEquipmentInput): UserEquipment {
         try {
             return equipmentService.addEquipment(newEquipmentInput)
         } catch (exception: Exception) {
