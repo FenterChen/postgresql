@@ -1,5 +1,7 @@
 package com.wanin.rd.postgresql_server.config
 
+import com.wanin.rd.postgresql_server.service.EquipmentService
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import springfox.documentation.builders.ApiInfoBuilder
@@ -11,10 +13,25 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
+@Configuration
+data class SwaggerContact(
+    var name: String?,
+    var url: String?,
+    var email: String?,
+)
+
+@Configuration
+@ConfigurationProperties(prefix = "swagger.api-info")
+data class SwaggerApiInfo(
+    var title: String?,
+    var description: String?,
+    var contact: SwaggerContact,
+    var version: String?,
+)
 
 @Configuration
 @EnableSwagger2
-class SwaggerConfig {
+class SwaggerConfig(private val swaggerApiInfo: SwaggerApiInfo) {
     @Bean
     fun createRestApi(): Docket? {
         return Docket(DocumentationType.SWAGGER_2)
@@ -27,10 +44,10 @@ class SwaggerConfig {
 
     private fun apiInfo(): ApiInfo? {
         return ApiInfoBuilder()
-            .title("Api Documentation")
-            .description("description...")
-            .contact(Contact("Daniel", null, null))
-            .version("1.0")
+            .title(swaggerApiInfo.title)
+            .description(swaggerApiInfo.description)
+            .contact(Contact(swaggerApiInfo.contact.name, swaggerApiInfo.contact.url, swaggerApiInfo.contact.email))
+            .version(swaggerApiInfo.version)
             .build()
     }
 }
