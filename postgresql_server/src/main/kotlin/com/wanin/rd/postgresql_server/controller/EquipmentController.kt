@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-//https://192.168.1.95:8080/swagger-ui/index.html
+//https://*/swagger-ui/index.html
 @Api(tags = ["EquipmentController"], description = "裝備")
 @RestController
 @RequestMapping("/equipment")

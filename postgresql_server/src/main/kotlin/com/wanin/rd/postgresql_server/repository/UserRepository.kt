@@ -22,7 +22,7 @@ class UserByEm {
     private lateinit var em: EntityManager
 
     @Transactional
-    fun updateByUserId(id: Int, userName: String?, role: String?): Int  {
+    fun updateByUserId(id: Int, userName: String?, role: String?): Int {
 
         val cb = em.criteriaBuilder
         val criteriaUpdate: CriteriaUpdate<User> = cb.createCriteriaUpdate(User::class.java)

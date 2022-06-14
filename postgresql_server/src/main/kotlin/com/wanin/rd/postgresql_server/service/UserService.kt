@@ -39,7 +39,7 @@ class UserService(
     }
 
     fun updateUserData(id: Int, userName: String?, role: String?): Int {
-       return userByEm.updateByUserId(id, userName, role)
+        return userByEm.updateByUserId(id, userName, role)
     }
 
 }
