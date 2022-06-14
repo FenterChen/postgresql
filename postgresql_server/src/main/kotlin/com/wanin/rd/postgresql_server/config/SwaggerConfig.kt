@@ -1,6 +1,5 @@
 package com.wanin.rd.postgresql_server.config
 
-import com.wanin.rd.postgresql_server.service.EquipmentService
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
