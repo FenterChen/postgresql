@@ -82,7 +82,6 @@ export default {
     const editConfirm = () => {
       axios
         .put(`${process.env.VUE_APP_URL}equipment/equipmentName`, {
-          userId: item.value.userId,
           equipmentId: item.value.equipmentId,
           equipmentName: item.value.equipmentName,
         })

@@ -55,9 +55,11 @@ class EquipmentService(
         when (computeValue[0].equipmentType) {
             "weapon" -> {
                 EquipmentAbilityDto.equipmentAtk = attribute * computeValue[0].equipmentBasicAtk!!//攻擊屬性
+                EquipmentAbilityDto.equipmentDef = 0//無防禦屬性
             }
             "armor" -> {
                 EquipmentAbilityDto.equipmentDef = attribute * computeValue[0].equipmentBasicDef!!//防禦屬性
+                EquipmentAbilityDto.equipmentAtk = 0//無攻擊屬性
             }
             else -> {
                 throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
